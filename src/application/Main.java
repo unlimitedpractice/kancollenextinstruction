@@ -14,9 +14,24 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	/**
+	 * ルートペイン
+	 */
+	protected BorderPane root;
+
+	/**
+	 * メインシーン
+	 */
+	protected Scene scene;
+
+	/**
+	 * Helloを表示するためのラベル
+	 */
+	protected Label helloLabel;
+
+	/**
 	 * スタートメソッド。
 	 * このメソッドが実質的なアプリケーションのエントリーとなる(アプリケーション起動時に実行される)
-	 * @param primatyStage アプリケーションのGUIを配置するベースとなるステージ。このステージにSceneを配置してそのSceneにPaneを配置して…といった形で構成する
+	 * @param primaryStage アプリケーションのGUIを配置するベースとなるステージ。このステージにSceneを配置してそのSceneにPaneを配置して…といった形で構成する
 	 */
 	public void start(Stage primaryStage) {
 		try {
@@ -24,15 +39,15 @@ public class Main extends Application {
 			primaryStage.setTitle("Next instruction");
 
 			// ルートペイン生成(BorderPane)
-			BorderPane root = new BorderPane();
+			root = new BorderPane();
 
 			// シーン生成
-			Scene scene = new Scene(root, 400, 400);
+			scene = new Scene(root, 400, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 
 			// Helloラベル生成
-			Label helloLabel = new Label("Hello, JavaFX.");
+			helloLabel = new Label("Hello, JavaFX.");
 			// ラベルのスタイルを設定
 			helloLabel.setStyle("-fx-font-size: 32pt;"); // フォントサイズ設定
 			// ラベルをルートペインに配置
