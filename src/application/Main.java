@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -38,20 +39,13 @@ public class Main extends Application {
 			// タイトル設定
 			primaryStage.setTitle("Next instruction");
 
-			// ルートペイン生成(BorderPane)
-			root = new BorderPane();
+			// ルートペイン生成(FXMLから)
+			 root = (BorderPane)FXMLLoader.load(getClass().getResource("../fxmls/HelloBorderPane.fxml"));
 
 			// シーン生成
 			scene = new Scene(root, 400, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-
-			// Helloラベル生成
-			helloLabel = new Label("Hello, JavaFX.");
-			// ラベルのスタイルを設定
-			helloLabel.setStyle("-fx-font-size: 32pt;"); // フォントサイズ設定
-			// ラベルをルートペインに配置
-			root.setCenter(helloLabel);
 
 			// ステージにシーンをセット
 			primaryStage.setScene(scene);
