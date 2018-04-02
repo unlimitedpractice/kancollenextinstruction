@@ -20,7 +20,7 @@ public class Hello {
 	public Hello() {
 		try {
 			// ペインをFXMLから読み込む
-			this.pane = (BorderPane)FXMLLoader.load(getClass().getResource("../fxmls/HelloBorderPane.fxml"));
+			this.pane = (BorderPane)FXMLLoader.load(getClass().getResource("fxmls/HelloBorderPane.fxml"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
