@@ -36,8 +36,6 @@ public class HelloController implements Initializable {
 	 */
 	public void initialize(URL location, ResourceBundle resources) {
 		// 現状とくになし
-		System.out.println(location);
-		System.out.println(resources);
 	}
 
 	/**
@@ -49,7 +47,7 @@ public class HelloController implements Initializable {
 
 	/**
 	 * helloLabelクリック時の処理
-	 * @param event イベント情報
+	 * @param event イベント発生時の各種情報(クリックされた場所の座標等もここから取得できる)
 	 */
 	public void helloLabelOnClick(MouseEvent event) {
 		helloLabel.setText("クリックされました。");
