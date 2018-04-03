@@ -38,6 +38,7 @@ public class Main extends Application {
 			root = (BorderPane)FXMLLoader.load(getClass().getResource("fxmls/HelloBorderPane.fxml"));
 
 			// シーン生成
+			System.out.println(PropertiesFilePaths.MaiinWindow.getValue());
 			scene = new Scene(root, 400, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
