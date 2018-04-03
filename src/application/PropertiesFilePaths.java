@@ -8,22 +8,21 @@ public enum PropertiesFilePaths {
 	/**
 	 * メインウィンドウの各種設定値等を記述したプロパティファイルのパス
 	 */
-	MaiinWindow("application/propertiesfiles/MainWindow.properties"),
-	SubWindow("application/propertiesFiles/SubWindow.properties");
+	MaiinWindow("application/propertiesfiles/MainWindow.properties");
 
 	/**
 	 * フィールドの定義。
-	 * 列挙子に値を付与する場合に必要なため定義
+	 * 列挙子に付与する値を保持するためのフィールド
 	 */
 	private String value;
 
 	/**
 	 * コンストラクタ定義。
 	 * 列挙子に値を付与する場合に必要なため定義
-	 * @param value 列挙子に値を付与するために定義
+	 * @param value 列挙子に付与する値
 	 */
 	private PropertiesFilePaths(String value) {
-		// 特に意味のない処理(何も処理を書かないとエラーになるため)
+		// 列挙子に対応する値をフィールドに取得
 		this.value = value;
 	}
 
