@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -14,9 +15,14 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	/**
-	 * ルートペイン
+	 * Helloを表示するペイン
 	 */
-	protected BorderPane root;
+	protected BorderPane helloPane;
+
+	/**
+	 * メインペイン
+	 */
+	protected Pane mainPane;
 
 	/**
 	 * メインシーン
@@ -33,13 +39,13 @@ public class Main extends Application {
 			// タイトル設定
 			primaryStage.setTitle("Next instruction");
 
-			// Helloクラス生成(Helloを表示するペインを含んでいる)
-			// helloObj = new HelloController();
-			root = (BorderPane)FXMLLoader.load(getClass().getResource("fxmls/HelloBorderPane.fxml"));
+			// Helloを表示するBorderPaneをFXMLから読み込み
+			// helloPane = (BorderPane)FXMLLoader.load(getClass().getResource("fxmls/HelloBorderPane.fxml"));
+			mainPane = (Pane)FXMLLoader.load(getClass().getResource("/resource/fxmls/main/MainPane.fxml"));
 
 			// シーン生成
 			System.out.println(PropertiesFilePaths.MaiinWindow.getValue());
-			scene = new Scene(root, 400, 400);
+			scene = new Scene(mainPane, 400, 300);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// ステージにシーンをセット
