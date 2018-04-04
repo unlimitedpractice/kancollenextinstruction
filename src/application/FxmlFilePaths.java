@@ -1,14 +1,14 @@
 package application;
 
 /**
- * 各プロパティファイルのパスを設定した定数を定義するためのENUMクラス
+ * 各FXMLファイルのパスを設定した定数を定義するためのENUMクラス
  * @author unlimitedpractice
  */
-public enum PropertiesFilePaths {
+public enum FxmlFilePaths {
 	/**
-	 * メインウィンドウの各種設定値等を記述したプロパティファイルのパス
+	 * メインペインのFSXMLファイルパス
 	 */
-	MaiinWindow("resource/propertiesfiles/MainWindow.properties");
+	MainPane("/resource/fxmls/main/MainPane.fxml");
 
 	/**
 	 * フィールドの定義。
@@ -21,7 +21,7 @@ public enum PropertiesFilePaths {
 	 * 列挙子に値を付与する場合に必要なため定義
 	 * @param value 列挙子に付与する値
 	 */
-	private PropertiesFilePaths(String value) {
+	private FxmlFilePaths(String value) {
 		// 列挙子に対応する値をフィールドに取得
 		this.value = value;
 	}

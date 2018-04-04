@@ -1,5 +1,8 @@
 package application;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,14 +41,19 @@ public class Main extends Application {
 		try {
 			// タイトル設定
 			primaryStage.setTitle("Next instruction");
+			// ウィンドウのリサイズができないようにする
+			primaryStage.setResizable(false);
 
-			// Helloを表示するBorderPaneをFXMLから読み込み
-			// helloPane = (BorderPane)FXMLLoader.load(getClass().getResource("fxmls/HelloBorderPane.fxml"));
-			mainPane = (Pane)FXMLLoader.load(getClass().getResource("/resource/fxmls/main/MainPane.fxml"));
+			// メインペインをFXMLから読み込み
+			mainPane = (Pane)FXMLLoader.load(getClass().getResource(FxmlFilePaths.MainPane.getValue()));
+
+			// メインウィンドウの設定をプロパティファイルから読み込む
+			InputStream mainPanePropertiesFileInputStream = Main.class.getClassLoader().getResourceAsStream(PropertiesFilePaths.MaiinWindow.getValue());
+			Properties mainPaneProperties = new Properties();
+			mainPaneProperties.load(mainPanePropertiesFileInputStream);
 
 			// シーン生成
-			System.out.println(PropertiesFilePaths.MaiinWindow.getValue());
-			scene = new Scene(mainPane, 400, 300);
+			scene = new Scene(mainPane, Integer.parseInt(mainPaneProperties.getProperty("width")), Integer.parseInt(mainPaneProperties.getProperty("height")));
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			// ステージにシーンをセット
