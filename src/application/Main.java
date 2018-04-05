@@ -1,6 +1,5 @@
 package application;
 
-import java.io.InputStream;
 import java.util.Properties;
 
 import javafx.application.Application;
@@ -9,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import utils.PropertiesUtil;
 
 /**
  * メインクラス。アプリケーションのエントリーを含んでいる。
@@ -44,13 +44,14 @@ public class Main extends Application {
 			// ウィンドウのリサイズができないようにする
 			primaryStage.setResizable(false);
 
+			// FXMLファイルのパスが記述されたプロパティファイルを読み込む
+			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
+
 			// メインペインをFXMLから読み込み
-			mainPane = (Pane)FXMLLoader.load(getClass().getResource(FxmlFilePaths.MainPane.getValue()));
+			mainPane = (Pane)FXMLLoader.load(getClass().getResource(fxmlFilePathsProperties.getProperty("MainPane")));
 
 			// メインウィンドウの設定をプロパティファイルから読み込む
-			InputStream mainPanePropertiesFileInputStream = Main.class.getClassLoader().getResourceAsStream(PropertiesFilePaths.MaiinWindow.getValue());
-			Properties mainPaneProperties = new Properties();
-			mainPaneProperties.load(mainPanePropertiesFileInputStream);
+			Properties mainPaneProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
 
 			// シーン生成
 			scene = new Scene(mainPane, Integer.parseInt(mainPaneProperties.getProperty("width")), Integer.parseInt(mainPaneProperties.getProperty("height")));
