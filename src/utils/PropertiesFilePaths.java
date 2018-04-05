@@ -39,7 +39,7 @@ public enum PropertiesFilePaths {
 
 	/**
 	 * 列挙子に付与された値を返す
-	 * @return
+	 * @return String 列挙子に付与された値
 	 */
 	public String getValue() {
 		return this.value;
