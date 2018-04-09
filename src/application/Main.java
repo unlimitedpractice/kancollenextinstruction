@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import utils.PropertiesUtil;
 
 /**
@@ -60,6 +61,11 @@ public class Main extends Application {
 			primaryStage.setTitle("艦これ Next instruction");
 			// ウィンドウのリサイズができないようにする
 			primaryStage.setResizable(false);
+
+			// 終了時の処理をイベント登録
+			primaryStage.setOnCloseRequest((WindowEvent event) -> {
+				onClose(event);
+			});
 
 			// FXMLファイルのパスが記述されたプロパティファイルを読み込む
 			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
@@ -113,5 +119,14 @@ public class Main extends Application {
 	 */
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	/**
+	 * 終了時の処理
+	 * @param event イベント発生時の各種情報
+	 */
+	public void onClose(WindowEvent event) {
+		// 明示的に終了する(これをしないとバックグラウンドでアプリが動いたままになる)
+		System.exit(0);
 	}
 }

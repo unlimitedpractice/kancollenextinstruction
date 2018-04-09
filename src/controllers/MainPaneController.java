@@ -144,7 +144,7 @@ public class MainPaneController implements Initializable {
 	}
 
 	/**
-	 * 夜戦突入・追撃せずのImageViewni表示される画像を切り替える
+	 * 夜戦突入・追撃せずのImageViewに表示される画像を順切り替える
 	 */
 	public void toggleNightBattleImageView() {
 		switch (this.nightBattleImageType) {

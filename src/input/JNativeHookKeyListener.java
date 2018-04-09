@@ -28,7 +28,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 
 	/**
 	 * コンストラクタ。
-	 * @param stage JavaFXのStage(基本的に大本になるStageを渡してあらゆるコントロールを操作できるようにするためのもの)
+	 * @param controllers コントローラを格納したマップ(コントローラ外からPaneの各コントロールを操作するために使う)
 	 */
 	public JNativeHookKeyListener(Map<String, Object> controllers) {
 		// 渡されたコントローラマップを保持する
@@ -84,6 +84,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 
 	/**
 	 * this.controllers のゲッター
+	 * @return コントローラを格納したマップを返す
 	 */
 	public Map<String, Object> getControllers() {
 		return this.controllers;
