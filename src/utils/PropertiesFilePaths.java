@@ -19,7 +19,17 @@ public enum PropertiesFilePaths {
 	/**
 	 * メインウィンドウの各種設定値等を記述したプロパティファイルのパス
 	 */
-	MainWindow("resource/propertiesfiles/MainWindow.properties");
+	MainWindow("resource/propertiesfiles/MainWindow.properties"),
+
+	/**
+	 * 画像ファイルパスを設定するプロパティファイルのパス
+	 */
+	ImagePaths("resource/propertiesfiles/ImagePaths.properties"),
+
+	/**
+	 * コントローラマップからコントローラを取得する際の名前設定プロパティファイルのパス
+	 */
+	ControllerNames("resource/propertiesfiles/ControllerNames.properties");
 
 	/**
 	 * フィールドの定義。

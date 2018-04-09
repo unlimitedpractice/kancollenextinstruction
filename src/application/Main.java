@@ -1,11 +1,20 @@
 package application;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+
+import controllers.MainPaneController;
+import input.JNativeHookKeyListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import utils.PropertiesUtil;
@@ -18,19 +27,24 @@ import utils.PropertiesUtil;
  */
 public class Main extends Application {
 	/**
-	 * Helloを表示するペイン
-	 */
-	protected BorderPane helloPane;
-
-	/**
 	 * メインペイン
 	 */
 	protected Pane mainPane;
+	/**
+	 * メインペインのコントローラ
+	 */
+	protected MainPaneController mainPaneController;
 
 	/**
 	 * メインシーン
 	 */
 	protected Scene scene;
+
+	/**
+	 * 各ペインのコントローラを保持するためのマップ。
+	 * (コントローラ外から、ペインを操作するのに使う)
+	 */
+	public Map<String, Object> controllers;
 
 	/**
 	 * スタートメソッド。
@@ -39,8 +53,11 @@ public class Main extends Application {
 	 */
 	public void start(Stage primaryStage) {
 		try {
+			// コントローラを保持するマップを初期化
+			this.controllers = new HashMap<String, Object>();
+
 			// タイトル設定
-			primaryStage.setTitle("Next instruction");
+			primaryStage.setTitle("艦これ Next instruction");
 			// ウィンドウのリサイズができないようにする
 			primaryStage.setResizable(false);
 
@@ -48,7 +65,14 @@ public class Main extends Application {
 			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
 
 			// メインペインをFXMLから読み込み
-			mainPane = (Pane)FXMLLoader.load(getClass().getResource(fxmlFilePathsProperties.getProperty("MainPane")));
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			InputStream mainPaneFxmlInputStream = Main.class.getClassLoader().getResourceAsStream(fxmlFilePathsProperties.getProperty("MainPane"));
+			mainPane = (Pane)fxmlLoader.load(mainPaneFxmlInputStream);
+
+			// コントローラマップからコントローラを取得する際の名前設定プロパティファイルを読み込む
+			Properties controllerNamesProperties = PropertiesUtil.loadPropertiesFile("ControllerNames");
+			// メインペインのコントローラを保持(コントローラ外から、ペインを操作するのに使うため)
+			this.controllers.put(controllerNamesProperties.getProperty("MainPaneController"), fxmlLoader.getController());
 
 			// メインウィンドウの設定をプロパティファイルから読み込む
 			Properties mainPaneProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
@@ -61,6 +85,22 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			// ステージを表示
 			primaryStage.show();
+
+			try {
+				// JNativeHookのログレベルをOFFに変えて、通常ログが大量に出ないようにする
+				Logger jNativeHookLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+				jNativeHookLogger.setLevel(Level.OFF);
+
+				// 非アクティブ時にもキー入力によるイベントを発生させるためJNativeHookを登録する
+				GlobalScreen.registerNativeHook();
+			} catch (NativeHookException e) {
+				System.err.println("NativeHookの登録で問題が発生しました。");
+				System.err.println(e.getMessage());
+				System.exit(1);
+			}
+
+			// JNativeHookのキー入力に対するリスナを登録
+			GlobalScreen.addNativeKeyListener(new JNativeHookKeyListener(this.controllers));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
