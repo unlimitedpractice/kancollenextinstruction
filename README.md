@@ -5,7 +5,7 @@
 
 ということが多々ある、主に私に向けたGUIアプリです。<br />
 
-![スクリーンショット](kancollenextinstruction/ss001.jpg)
+![スクリーンショット](kancollenextinstruction/blob/images/ss001.jpg)
 
 小窓内に 進撃・撤退 と 夜戦突入・追撃せず の2か所画像を表示し<br />
 それぞれ、クリックもしくは、「^」「\」(バックスラッシュ)キーで画像を切り替え可能です。
