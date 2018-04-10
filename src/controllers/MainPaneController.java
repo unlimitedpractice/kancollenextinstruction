@@ -1,16 +1,22 @@
 package controllers;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import utils.PropertiesUtil;
 
 /**
@@ -39,6 +45,16 @@ public class MainPaneController implements Initializable {
 	 * 追撃せずの画像が表示されている
 	 */
 	private static final int NIGHTBATTLEIMG_TYPE_DONOTPURSUE = 4;
+
+	/**
+	 * このペインを呼び出しているStageを保持するプロパティ
+	 */
+	public Stage stage;
+
+	/**
+	 * FXMLファイルのパスが設定されたプロパティファイルを読み込むクラス
+	 */
+	Properties fxmlFilePathsProperties;
 
 	/**
 	 * 画像ファイルのパスが設定されたプロパティファイルを読み込むクラス
@@ -74,6 +90,26 @@ public class MainPaneController implements Initializable {
 	private Map<Integer, Image> images;
 
 	/**
+	 * 設定ボタン
+	 */
+	public Button configButton;
+
+	/**
+	 * 設定ウィンドウのStage
+	 */
+	public Stage configStage;
+
+	/**
+	 * 設定ウィンドウのScene
+	 */
+	public Scene configScene;
+
+	/**
+	 * 設定ウィンドウのPane
+	 */
+	public Pane configPane;
+
+	/**
 	 * 初期化処理。
 	 * コントローラのルート要素が完全に処理された後に、コントローラを初期化するためにコールされる。
 	 * @param location ルート・オブジェクトの相対パスの解決に使用される場所、または場所が不明の場合は、null。
@@ -87,6 +123,9 @@ public class MainPaneController implements Initializable {
 	 * コンストラクタ。
 	 */
 	public MainPaneController() {
+		// FXMLファイルのパスが記述されたプロパティファイルを読み込む
+		this.fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
+
 		// 画像ファイルのパスを設定するプロパティファイルを読み込む
 		this.imagePathsProperties = PropertiesUtil.loadPropertiesFile("ImagePaths");
 
@@ -97,6 +136,22 @@ public class MainPaneController implements Initializable {
 		this.images.put(MainPaneController.ATTACKIMG_TYPE_WITHDRAWAL,       new Image(imagePathsProperties.getProperty("withdrawalImagePath")));  // 撤退の画像読み込み
 		this.images.put(MainPaneController.NIGHTBATTLEIMG_TYPE_NIGHTBATTLE, new Image(imagePathsProperties.getProperty("nightBattleImagePath"))); // 夜戦突入の画像読み込み
 		this.images.put(MainPaneController.NIGHTBATTLEIMG_TYPE_DONOTPURSUE, new Image(imagePathsProperties.getProperty("doNotPursueImagePath"))); // 追撃せずの画像読み込み
+	}
+
+	/**
+	 * stageのゲッター
+	 * @return このペインを呼び出しているStageを返す。
+	 */
+	public Stage getStage() {
+		return this.stage;
+	}
+
+	/**
+	 * stageのセッター
+	 * @param stage このペインを呼び出しているステージ
+	 */
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 
 	/**
@@ -162,6 +217,41 @@ public class MainPaneController implements Initializable {
 	}
 
 	/**
+	 * 設定ウィンドウを開く
+	 */
+	public void openConfigWindow() {
+		// Stageを生成
+		this.configStage = new Stage();
+		// モーダルウィンドウとして設定(子ウィンドウで操作を完了しないともとのウィンドウが操作できない)
+		this.configStage.initModality(Modality.APPLICATION_MODAL);
+		// 設定ウィンドウの親を設定
+		this.configStage.initOwner(this.stage);
+
+		// 設定ウィンドウのタイトル設定
+		this.configStage.setTitle("設定");
+		// 設定ウィンドウのリサイズができないようにする
+		this.configStage.setResizable(false);
+
+		try {
+			// 設定ウィンドウのペインをFXMLから読み込み
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			InputStream conigPaneFxmlInputStream = MainPaneController.class.getClassLoader().getResourceAsStream(this.fxmlFilePathsProperties.getProperty("ConfigPane"));
+			this.configPane = (Pane)fxmlLoader.load(conigPaneFxmlInputStream);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		// 設定ウィンドウのシーンを生成
+		this.configScene = new Scene(this.configPane, 300, 300);
+		this.configScene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
+
+		// 設定ウィンドウのステージにシーンをセット
+		this.configStage.setScene(this.configScene);
+		// 設定ウィンドウのステージを表示
+		this.configStage.show();
+	}
+
+	/**
 	 * attackImageViewクリック時の処理
 	 * @param event イベント発生時の各種情報(クリックされた場所の座標等もここから取得できる)
 	 */
@@ -177,5 +267,13 @@ public class MainPaneController implements Initializable {
 	public void nightBattleImageViewClick(MouseEvent event) {
 		// 画像を切り替える
 		this.toggleNightBattleImageView();
+	}
+
+	/**
+	 * configButtonが押された場合の処理
+	 */
+	public void configButtonOnAction() {
+		// 設定ウィンドウを開く
+		this.openConfigWindow();
 	}
 }

@@ -80,6 +80,10 @@ public class Main extends Application {
 			// メインペインのコントローラを保持(コントローラ外から、ペインを操作するのに使うため)
 			this.controllers.put(controllerNamesProperties.getProperty("MainPaneController"), fxmlLoader.getController());
 
+			// コントローラクラスにStageを保持する
+			MainPaneController mainPaneController = fxmlLoader.getController();
+			mainPaneController.setStage(primaryStage);
+
 			// メインウィンドウの設定をプロパティファイルから読み込む
 			Properties mainPaneProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
 

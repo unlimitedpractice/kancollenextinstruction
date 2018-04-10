@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -19,5 +20,6 @@
             <Image url="resource/fxmls/main/nightbattle.png" />
          </image>
       </ImageView>
+      <Button id="configButton" fx:id="configButton" layoutX="326.0" layoutY="249.0" mnemonicParsing="false" onAction="#configButtonOnAction" text="設定" />
    </children>
 </Pane>
