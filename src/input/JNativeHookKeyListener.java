@@ -12,7 +12,7 @@ import utils.PropertiesUtil;
 
 /**
  * JNativeHookのキー入力のイベントリスナ
- * @author unlimitedpractice
+ * @author 皇翔(Shou Sumeragi)
  */
 public class JNativeHookKeyListener implements NativeKeyListener {
 	/**

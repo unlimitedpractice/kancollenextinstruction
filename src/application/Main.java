@@ -1,6 +1,5 @@
 package application;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -13,33 +12,22 @@ import org.jnativehook.NativeHookException;
 import controllers.MainPaneController;
 import input.JNativeHookKeyListener;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import utils.PropertiesUtil;
+import utils.WindowManager;
 
 /**
  * メインクラス。アプリケーションのエントリーを含んでいる。
  * アプリケーション起動時、mainメソッドを介してstartメソッドが実行される。
- * @author unlimitedpractice
+ * @author 皇翔(Shou Sumeragi)
  *
  */
 public class Main extends Application {
 	/**
-	 * メインペイン
+	 * メインウィンドウ
 	 */
-	protected Pane mainPane;
-	/**
-	 * メインペインのコントローラ
-	 */
-	protected MainPaneController mainPaneController;
-
-	/**
-	 * メインシーン
-	 */
-	protected Scene scene;
+	protected WindowManager<MainPaneController> mainWindow;
 
 	/**
 	 * 各ペインのコントローラを保持するためのマップ。
@@ -57,44 +45,33 @@ public class Main extends Application {
 			// コントローラを保持するマップを初期化
 			this.controllers = new HashMap<String, Object>();
 
-			// タイトル設定
-			primaryStage.setTitle("艦これ Next instruction");
-			// ウィンドウのリサイズができないようにする
-			primaryStage.setResizable(false);
-
-			// 終了時の処理をイベント登録
-			primaryStage.setOnCloseRequest((WindowEvent event) -> {
-				onClose(event);
-			});
-
 			// FXMLファイルのパスが記述されたプロパティファイルを読み込む
 			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
 
-			// メインペインをFXMLから読み込み
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			InputStream mainPaneFxmlInputStream = Main.class.getClassLoader().getResourceAsStream(fxmlFilePathsProperties.getProperty("MainPane"));
-			mainPane = (Pane)fxmlLoader.load(mainPaneFxmlInputStream);
+			// メインウィンドウの設定をプロパティファイルから読み込む
+			Properties mainWindowProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
+
+			// メインウィンドウを生成して開く
+			this.mainWindow = new WindowManager<MainPaneController>("mainWindow", fxmlFilePathsProperties.getProperty("MainPane"), primaryStage, Integer.parseInt(mainWindowProperties.getProperty("width")), Integer.parseInt(mainWindowProperties.getProperty("height")));
 
 			// コントローラマップからコントローラを取得する際の名前設定プロパティファイルを読み込む
 			Properties controllerNamesProperties = PropertiesUtil.loadPropertiesFile("ControllerNames");
-			// メインペインのコントローラを保持(コントローラ外から、ペインを操作するのに使うため)
-			this.controllers.put(controllerNamesProperties.getProperty("MainPaneController"), fxmlLoader.getController());
+			// メインウィンドウのコントローラを保持(コントローラ外から、ペインを操作するのに使うため)
+			this.controllers.put(controllerNamesProperties.getProperty("MainPaneController"), this.mainWindow.getController());
 
-			// コントローラクラスにStageを保持する
-			MainPaneController mainPaneController = fxmlLoader.getController();
-			mainPaneController.setStage(primaryStage);
+			// メインウィンドウのコントローラにStageを保持する
+			this.mainWindow.getController().setStage(this.mainWindow.getStage());
 
-			// メインウィンドウの設定をプロパティファイルから読み込む
-			Properties mainPaneProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
+			// メインウィンドウのタイトル設定
+			this.mainWindow.getStage().setTitle("艦これ Next instruction");
 
-			// シーン生成
-			scene = new Scene(mainPane, Integer.parseInt(mainPaneProperties.getProperty("width")), Integer.parseInt(mainPaneProperties.getProperty("height")));
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			// ウィンドウのリサイズができないようにする
+			this.mainWindow.getStage().setResizable(false);
 
-			// ステージにシーンをセット
-			primaryStage.setScene(scene);
-			// ステージを表示
-			primaryStage.show();
+			// 終了時の処理をイベント登録
+			this.mainWindow.getStage().setOnCloseRequest((WindowEvent event) -> {
+				onClose(event);
+			});
 
 			try {
 				// JNativeHookのログレベルをOFFに変えて、通常ログが大量に出ないようにする

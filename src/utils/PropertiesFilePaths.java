@@ -2,7 +2,7 @@ package utils;
 
 /**
  * 各プロパティファイルのパスを設定した定数を定義するためのENUMクラス
- * @author unlimitedpractice
+ * @author 皇翔(Shou Sumeragi)
  */
 public enum PropertiesFilePaths {
 	/**

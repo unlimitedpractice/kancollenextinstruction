@@ -21,7 +21,7 @@ import utils.PropertiesUtil;
 
 /**
  * Helloを表示するペインのコントローラとなるクラス
- * @author unlimitedpractice
+ * @author 皇翔(Shou Sumeragi)
  */
 public class MainPaneController implements Initializable {
 	/**

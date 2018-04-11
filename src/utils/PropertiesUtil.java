@@ -6,7 +6,7 @@ import java.util.Properties;
 
 /**
  * プロパティファイルの扱いを容易にするためのクラス
- * @author unlimitedpractice
+ * @author 皇翔(Shou Sumeragi)
  */
 public class PropertiesUtil {
 	/**
