@@ -46,14 +46,20 @@ public class WindowManager<T> {
 	 * fxmlPathで指定されたFXMLを読み込む
 	 * @param windowId ウィンドウID(ウィンドウを複数格納したマップから取り出す時に使うID)
 	 * @param fxmlPath 読み込むFXMLのパス
-	 * @param primaryStage 根元のウィンドウを扱うことになるためstartメソッドの引数primaryStageをこの引数で渡す
+	 * @param primaryStage 根元のウィンドウを扱う場合、startメソッドの引数primaryStageをこの引数に渡す。nullを渡した場合は子ウィンドウを扱うものとして新しいStageを生成する
 	 * @param width ウィンドウ横幅
 	 * @param height ウィンドウ縦幅
 	 */
 	public WindowManager(String windowId, String fxmlPath, Stage primaryStage, int width, int height) {
 		try {
-			// ステージをセット
-			this.stage = primaryStage;
+			// primaryStageが渡されていれば
+			if (primaryStage != null) {
+				// primaryStageをこのウィンドウのステージとしてセット
+				this.stage = primaryStage;
+			} else {
+				// 指定されていない場合は、新たにStageを生成する
+				this.stage = new Stage();
+			}
 
 			// FXMLを読み込む
 			FXMLLoader fxmlLoader = new FXMLLoader();
@@ -69,8 +75,6 @@ public class WindowManager<T> {
 
 			// ステージにシーンをセット
 			this.stage.setScene(this.scene);
-			// ステージ(ウィンドウ)を表示
-			this.stage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -114,5 +118,12 @@ public class WindowManager<T> {
 	 */
 	public void setWindowTitle(String windowTitle) {
 		this.stage.setTitle(windowTitle);
+	}
+
+	/**
+	 * ウィンドウを表示する
+	 */
+	public void showWindow() {
+		this.stage.show();
 	}
 }

@@ -1,15 +1,12 @@
 package controllers;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.PropertiesUtil;
+import utils.WindowManager;
 
 /**
  * Helloを表示するペインのコントローラとなるクラス
@@ -95,19 +93,9 @@ public class MainPaneController implements Initializable {
 	public Button configButton;
 
 	/**
-	 * 設定ウィンドウのStage
+	 * 設定ウィンドウの管理クラス
 	 */
-	public Stage configStage;
-
-	/**
-	 * 設定ウィンドウのScene
-	 */
-	public Scene configScene;
-
-	/**
-	 * 設定ウィンドウのPane
-	 */
-	public Pane configPane;
+	public WindowManager configWindow;
 
 	/**
 	 * 初期化処理。
@@ -220,35 +208,20 @@ public class MainPaneController implements Initializable {
 	 * 設定ウィンドウを開く
 	 */
 	public void openConfigWindow() {
-		// Stageを生成
-		this.configStage = new Stage();
+		// 設定ウィンドウをFXMLから生成
+		this.configWindow = new WindowManager("configWindow", this.fxmlFilePathsProperties.getProperty("ConfigPane"), null, 300, 300);
 		// モーダルウィンドウとして設定(子ウィンドウで操作を完了しないともとのウィンドウが操作できない)
-		this.configStage.initModality(Modality.APPLICATION_MODAL);
+		this.configWindow.getStage().initModality(Modality.APPLICATION_MODAL);
 		// 設定ウィンドウの親を設定
-		this.configStage.initOwner(this.stage);
+		this.configWindow.getStage().initOwner(this.stage);
 
 		// 設定ウィンドウのタイトル設定
-		this.configStage.setTitle("設定");
+		this.configWindow.getStage().setTitle("設定");
 		// 設定ウィンドウのリサイズができないようにする
-		this.configStage.setResizable(false);
+		this.configWindow.getStage().setResizable(false);
 
-		try {
-			// 設定ウィンドウのペインをFXMLから読み込み
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			InputStream conigPaneFxmlInputStream = MainPaneController.class.getClassLoader().getResourceAsStream(this.fxmlFilePathsProperties.getProperty("ConfigPane"));
-			this.configPane = (Pane)fxmlLoader.load(conigPaneFxmlInputStream);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		// 設定ウィンドウのシーンを生成
-		this.configScene = new Scene(this.configPane, 300, 300);
-		this.configScene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
-
-		// 設定ウィンドウのステージにシーンをセット
-		this.configStage.setScene(this.configScene);
 		// 設定ウィンドウのステージを表示
-		this.configStage.show();
+		this.configWindow.showWindow();
 	}
 
 	/**

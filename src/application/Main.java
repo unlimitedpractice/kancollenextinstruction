@@ -40,7 +40,7 @@ public class Main extends Application {
 			// メインウィンドウの設定をプロパティファイルから読み込む
 			Properties mainWindowProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
 
-			// メインウィンドウを生成して開く
+			// メインウィンドウをFXMLから生成
 			this.mainWindow = new WindowManager<MainPaneController>("mainWindow", fxmlFilePathsProperties.getProperty("MainPane"), primaryStage, Integer.parseInt(mainWindowProperties.getProperty("width")), Integer.parseInt(mainWindowProperties.getProperty("height")));
 
 			// メインウィンドウのコントローラにStageを保持する
@@ -56,6 +56,9 @@ public class Main extends Application {
 			this.mainWindow.getStage().setOnCloseRequest((WindowEvent event) -> {
 				onClose(event);
 			});
+
+			// メインウィンドウを表示
+			this.mainWindow.showWindow();
 
 			try {
 				// JNativeHookのログレベルをOFFに変えて、通常ログが大量に出ないようにする
