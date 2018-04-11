@@ -1,7 +1,5 @@
 package application;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,21 +28,12 @@ public class Main extends Application {
 	protected WindowManager<MainPaneController> mainWindow;
 
 	/**
-	 * 各ペインのコントローラを保持するためのマップ。
-	 * (コントローラ外から、ペインを操作するのに使う)
-	 */
-	public Map<String, Object> controllers;
-
-	/**
 	 * スタートメソッド。
 	 * このメソッドが実質的なアプリケーションのエントリーとなる(アプリケーション起動時に実行される)
 	 * @param primaryStage アプリケーションのGUIを配置するベースとなるステージ。このステージにSceneを配置してそのSceneにPaneを配置して…といった形で構成する
 	 */
 	public void start(Stage primaryStage) {
 		try {
-			// コントローラを保持するマップを初期化
-			this.controllers = new HashMap<String, Object>();
-
 			// FXMLファイルのパスが記述されたプロパティファイルを読み込む
 			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
 
@@ -53,11 +42,6 @@ public class Main extends Application {
 
 			// メインウィンドウを生成して開く
 			this.mainWindow = new WindowManager<MainPaneController>("mainWindow", fxmlFilePathsProperties.getProperty("MainPane"), primaryStage, Integer.parseInt(mainWindowProperties.getProperty("width")), Integer.parseInt(mainWindowProperties.getProperty("height")));
-
-			// コントローラマップからコントローラを取得する際の名前設定プロパティファイルを読み込む
-			Properties controllerNamesProperties = PropertiesUtil.loadPropertiesFile("ControllerNames");
-			// メインウィンドウのコントローラを保持(コントローラ外から、ペインを操作するのに使うため)
-			this.controllers.put(controllerNamesProperties.getProperty("MainPaneController"), this.mainWindow.getController());
 
 			// メインウィンドウのコントローラにStageを保持する
 			this.mainWindow.getController().setStage(this.mainWindow.getStage());
@@ -87,7 +71,7 @@ public class Main extends Application {
 			}
 
 			// JNativeHookのキー入力に対するリスナを登録
-			GlobalScreen.addNativeKeyListener(new JNativeHookKeyListener(this.controllers));
+			GlobalScreen.addNativeKeyListener(new JNativeHookKeyListener(this.mainWindow));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

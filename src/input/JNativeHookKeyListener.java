@@ -1,14 +1,10 @@
 package input;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import controllers.MainPaneController;
-import utils.PropertiesUtil;
+import utils.WindowManager;
 
 /**
  * JNativeHookのキー入力のイベントリスナ
@@ -16,27 +12,18 @@ import utils.PropertiesUtil;
  */
 public class JNativeHookKeyListener implements NativeKeyListener {
 	/**
-	 * コンストラクタで渡されたコントローラマップを保持するプロパティ。
-	 * このクラスからペインを操作するために使用
+	 * コンストラクタで渡されたメインウィンドウの管理クラスを保持するプロパティ。
+	 * このクラスからメインウィンドウとその配下を操作するために使用
 	 */
-	private Map<String, Object> controllers;
-
-	/**
-	 * コントローラマップからコントローラを取得する際の名前設定プロパティファイルを保持するプロパティ
-	 */
-	private Properties controllerNamesProperties;
+	protected WindowManager<MainPaneController> mainWindow;
 
 	/**
 	 * コンストラクタ。
 	 * @param controllers コントローラを格納したマップ(コントローラ外からPaneの各コントロールを操作するために使う)
 	 */
-	public JNativeHookKeyListener(Map<String, Object> controllers) {
-		// 渡されたコントローラマップを保持する
-		this.controllers = new HashMap<String, Object>(); // コントローラマップを初期化
-		this.setControllers(controllers);
-
-		// コントローラマップからコントローラを取得する際の名前設定プロパティファイルを読み込む
-		this.controllerNamesProperties = PropertiesUtil.loadPropertiesFile("ControllerNames");
+	public JNativeHookKeyListener(WindowManager<MainPaneController> mainWindow) {
+		// 渡されたウィンドウを保持する
+		this.mainWindow = mainWindow;
 	}
 
 	/**
@@ -56,7 +43,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 //		System.out.println(event.paramString());
 
 		// メインペインのコントローラ取得
-		MainPaneController mainPaneController = (MainPaneController)this.getControllers().get(this.controllerNamesProperties.getProperty("MainPaneController"));
+		MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
 
 		// 離されたキーに対応する処理
 		switch (event.getKeyCode()) {
@@ -80,21 +67,5 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	public void nativeKeyTyped(NativeKeyEvent event) {
 //		System.out.println(event.paramString());
 		// 現状、特に処理なし
-	}
-
-	/**
-	 * this.controllers のゲッター
-	 * @return コントローラを格納したマップを返す
-	 */
-	public Map<String, Object> getControllers() {
-		return this.controllers;
-	}
-
-	/**
-	 * this.controllers のセッター
-	 * @param controllers セットするコントローラマップ
-	 */
-	public void setControllers(Map<String, Object> controllers) {
-		this.controllers = controllers;
 	}
 }
