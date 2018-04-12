@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
+import javafx.stage.WindowEvent;
 import utils.PropertiesUtil;
 import utils.WindowManager;
 
@@ -198,9 +199,16 @@ public class MainPaneController extends BaseController implements Initializable 
 		this.configWindow.getController().setWindow(this.configWindow);
 		// 設定ウィンドウの親ウィンドウをセット
 		this.configWindow.setParentWindow(this.window);
+		// JNativeHookのキーイベントリスナを設定ウィンドウに保持
+		this.configWindow.setJNativeHookKeyListener(this.window.getJNativeHookKeyListener());
 
 		// JNativeHookのキー入力検知を一時停止する
+		this.window.getJNativeHookKeyListener().setIsDetectInput(false);
 
+		// 設定ウィンドウが閉じられた時の処理を登録
+		this.configWindow.getStage().setOnCloseRequest((WindowEvent event) -> {
+			configWindowOnClose(event);
+		});
 
 		// 設定ウィンドウのステージを表示
 		this.configWindow.showWindow();
@@ -230,5 +238,13 @@ public class MainPaneController extends BaseController implements Initializable 
 	public void configButtonOnAction() {
 		// 設定ウィンドウを開く
 		this.openConfigWindow();
+	}
+
+	/**
+	 * 設定ウィンドウが閉じられた時の処理
+	 */
+	public void configWindowOnClose(WindowEvent event) {
+		// JNativeHookのキー入力検知を再開する
+		this.configWindow.getJNativeHookKeyListener().setIsDetectInput(true);
 	}
 }

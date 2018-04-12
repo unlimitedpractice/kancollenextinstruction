@@ -35,6 +35,22 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	}
 
 	/**
+	 * isDetectInputのゲッター
+	 * @return キー入力を検知するかどうかのフラグ(true=入力を検知する、false=入力を検知しない)
+	 */
+	public boolean getIsDetectInput() {
+		return this.isDetectInput;
+	}
+
+	/**
+	 * isDetectInputのセッター
+	 * @param isDetectInput キー入力を検知するかどうかのフラグ(true=入力を検知する、false=入力を検知しない)
+	 */
+	public void setIsDetectInput(boolean isDetectInput) {
+		this.isDetectInput = isDetectInput;
+	}
+
+	/**
 	 * キーが押された際の処理
 	 * @param event イベント発生時の各種情報(どのキーが押されたか等)
 	 */

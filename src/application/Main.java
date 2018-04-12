@@ -74,7 +74,10 @@ public class Main extends Application {
 			}
 
 			// JNativeHookのキー入力に対するリスナを登録
-			GlobalScreen.addNativeKeyListener(new JNativeHookKeyListener(this.mainWindow));
+			JNativeHookKeyListener jNativeHookKeyListener = new JNativeHookKeyListener(this.mainWindow);
+			GlobalScreen.addNativeKeyListener(jNativeHookKeyListener);
+			// リスナをウィンドウに保持
+			this.mainWindow.setJNativeHookKeyListener(jNativeHookKeyListener);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

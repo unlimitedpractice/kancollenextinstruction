@@ -126,6 +126,22 @@ public class WindowManager<T> {
 	}
 
 	/**
+	 * jNativeHookKeyListenerのセッター
+	 * @param jNativeHookKeyListener
+	 */
+	public void setJNativeHookKeyListener(JNativeHookKeyListener jNativeHookKeyListener) {
+		this.jNativeHookKeyListener = jNativeHookKeyListener;
+	}
+
+	/**
+	 * jNativeHookKeyListenerのゲッター
+	 * @return JNativeHookのキーイベントリスナ
+	 */
+	public JNativeHookKeyListener getJNativeHookKeyListener() {
+		return this.jNativeHookKeyListener;
+	}
+
+	/**
 	 * 親ウィンドウをセットする
 	 * @param parentWindow 親ウィンドウのウィンドウ管理クラス
 	 */
