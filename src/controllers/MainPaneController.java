@@ -60,6 +60,11 @@ public class MainPaneController implements Initializable {
 	Properties imagePathsProperties;
 
 	/**
+	 * 設定ウィンドウのプロパティファイルを読み込むクラス
+	 */
+	Properties configWindowProperties;
+
+	/**
 	 * 各種コントロールを配置するメインとなるペイン
 	 */
 	public Pane mainPane;
@@ -116,6 +121,9 @@ public class MainPaneController implements Initializable {
 
 		// 画像ファイルのパスを設定するプロパティファイルを読み込む
 		this.imagePathsProperties = PropertiesUtil.loadPropertiesFile("ImagePaths");
+
+		// 設定ウィンドウのプロパティファイルを読み込む
+		this.configWindowProperties = PropertiesUtil.loadPropertiesFile("ConfigWindow");
 
 		// 画像格納リストを初期化
 		this.images = new HashMap<Integer, Image>();
@@ -209,14 +217,14 @@ public class MainPaneController implements Initializable {
 	 */
 	public void openConfigWindow() {
 		// 設定ウィンドウをFXMLから生成
-		this.configWindow = new WindowManager("configWindow", this.fxmlFilePathsProperties.getProperty("ConfigPane"), null, 300, 300);
+		this.configWindow = new WindowManager("configWindow", this.fxmlFilePathsProperties.getProperty("ConfigPane"), null, Integer.parseInt(this.configWindowProperties.getProperty("width")), Integer.parseInt(this.configWindowProperties.getProperty("height")));
 		// モーダルウィンドウとして設定(子ウィンドウで操作を完了しないともとのウィンドウが操作できない)
 		this.configWindow.getStage().initModality(Modality.APPLICATION_MODAL);
 		// 設定ウィンドウの親を設定
 		this.configWindow.getStage().initOwner(this.stage);
 
 		// 設定ウィンドウのタイトル設定
-		this.configWindow.getStage().setTitle("設定");
+		this.configWindow.getStage().setTitle(this.configWindowProperties.getProperty("title"));
 		// 設定ウィンドウのリサイズができないようにする
 		this.configWindow.getStage().setResizable(false);
 

@@ -47,7 +47,7 @@ public class Main extends Application {
 			this.mainWindow.getController().setStage(this.mainWindow.getStage());
 
 			// メインウィンドウのタイトル設定
-			this.mainWindow.getStage().setTitle("艦これ Next instruction");
+			this.mainWindow.getStage().setTitle(mainWindowProperties.getProperty("title"));
 
 			// ウィンドウのリサイズができないようにする
 			this.mainWindow.getStage().setResizable(false);

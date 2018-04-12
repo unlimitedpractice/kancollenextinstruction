@@ -22,6 +22,11 @@ public enum PropertiesFilePaths {
 	MainWindow("resource/propertiesfiles/MainWindow.properties"),
 
 	/**
+	 * コンフィグウィンドウの各種設定値等を記述したプロパティファイルのパス
+	 */
+	ConfigWindow("resource/propertiesfiles/ConfigWindow.properties"),
+
+	/**
 	 * 画像ファイルパスを設定するプロパティファイルのパス
 	 */
 	ImagePaths("resource/propertiesfiles/ImagePaths.properties"),
