@@ -1,27 +1,23 @@
 package controllers;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import utils.PropertiesUtil;
 import utils.WindowManager;
 
 /**
- * Helloを表示するペインのコントローラとなるクラス
+ * メインペインのコントローラクラス
  * @author 皇翔(Shou Sumeragi)
  */
-public class MainPaneController implements Initializable {
+public class MainPaneController extends BaseController implements Initializable {
 	/**
 	 * クラス内定数。「進撃・撤退のImageViewでどの画像が表示されているか」
 	 * 進撃の画像が表示されている
@@ -45,11 +41,6 @@ public class MainPaneController implements Initializable {
 	private static final int NIGHTBATTLEIMG_TYPE_DONOTPURSUE = 4;
 
 	/**
-	 * このペインを呼び出しているStageを保持するプロパティ
-	 */
-	public Stage stage;
-
-	/**
 	 * FXMLファイルのパスが設定されたプロパティファイルを読み込むクラス
 	 */
 	Properties fxmlFilePathsProperties;
@@ -63,11 +54,6 @@ public class MainPaneController implements Initializable {
 	 * 設定ウィンドウのプロパティファイルを読み込むクラス
 	 */
 	Properties configWindowProperties;
-
-	/**
-	 * 各種コントロールを配置するメインとなるペイン
-	 */
-	public Pane mainPane;
 
 	/**
 	 * 進撃・撤退の画像を表示するImageView
@@ -100,22 +86,15 @@ public class MainPaneController implements Initializable {
 	/**
 	 * 設定ウィンドウの管理クラス
 	 */
-	public WindowManager configWindow;
-
-	/**
-	 * 初期化処理。
-	 * コントローラのルート要素が完全に処理された後に、コントローラを初期化するためにコールされる。
-	 * @param location ルート・オブジェクトの相対パスの解決に使用される場所、または場所が不明の場合は、null。
-	 * @param resources ルート・オブジェクトのローカライズに使用されるリソース、またはルート・オブジェクトがローカライズされていない場合は、null。
-	 */
-	public void initialize(URL location, ResourceBundle resources) {
-		// 現状特に処理なし
-	}
+	public WindowManager<ConfigPaneController> configWindow;
 
 	/**
 	 * コンストラクタ。
 	 */
 	public MainPaneController() {
+		// 親クラスのコンストラクタ実行
+		super();
+
 		// FXMLファイルのパスが記述されたプロパティファイルを読み込む
 		this.fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
 
@@ -132,22 +111,6 @@ public class MainPaneController implements Initializable {
 		this.images.put(MainPaneController.ATTACKIMG_TYPE_WITHDRAWAL,       new Image(imagePathsProperties.getProperty("withdrawalImagePath")));  // 撤退の画像読み込み
 		this.images.put(MainPaneController.NIGHTBATTLEIMG_TYPE_NIGHTBATTLE, new Image(imagePathsProperties.getProperty("nightBattleImagePath"))); // 夜戦突入の画像読み込み
 		this.images.put(MainPaneController.NIGHTBATTLEIMG_TYPE_DONOTPURSUE, new Image(imagePathsProperties.getProperty("doNotPursueImagePath"))); // 追撃せずの画像読み込み
-	}
-
-	/**
-	 * stageのゲッター
-	 * @return このペインを呼び出しているStageを返す。
-	 */
-	public Stage getStage() {
-		return this.stage;
-	}
-
-	/**
-	 * stageのセッター
-	 * @param stage このペインを呼び出しているステージ
-	 */
-	public void setStage(Stage stage) {
-		this.stage = stage;
 	}
 
 	/**
@@ -217,16 +180,27 @@ public class MainPaneController implements Initializable {
 	 */
 	public void openConfigWindow() {
 		// 設定ウィンドウをFXMLから生成
-		this.configWindow = new WindowManager("configWindow", this.fxmlFilePathsProperties.getProperty("ConfigPane"), null, Integer.parseInt(this.configWindowProperties.getProperty("width")), Integer.parseInt(this.configWindowProperties.getProperty("height")));
+		this.configWindow = new WindowManager<ConfigPaneController>("configWindow", this.fxmlFilePathsProperties.getProperty("ConfigPane"), null, Integer.parseInt(this.configWindowProperties.getProperty("width")), Integer.parseInt(this.configWindowProperties.getProperty("height")));
+
 		// モーダルウィンドウとして設定(子ウィンドウで操作を完了しないともとのウィンドウが操作できない)
 		this.configWindow.getStage().initModality(Modality.APPLICATION_MODAL);
-		// 設定ウィンドウの親を設定
-		this.configWindow.getStage().initOwner(this.stage);
+
+		// 設定ウィンドウの親ステージを設定
+		this.configWindow.getStage().initOwner(this.window.getStage());
 
 		// 設定ウィンドウのタイトル設定
 		this.configWindow.getStage().setTitle(this.configWindowProperties.getProperty("title"));
+
 		// 設定ウィンドウのリサイズができないようにする
 		this.configWindow.getStage().setResizable(false);
+
+		// 設定ウィンドウのコントローラに設定ウィンドウのウィンドウクラスを保持
+		this.configWindow.getController().setWindow(this.configWindow);
+		// 設定ウィンドウの親ウィンドウをセット
+		this.configWindow.setParentWindow(this.window);
+
+		// JNativeHookのキー入力検知を一時停止する
+
 
 		// 設定ウィンドウのステージを表示
 		this.configWindow.showWindow();

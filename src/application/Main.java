@@ -43,8 +43,8 @@ public class Main extends Application {
 			// メインウィンドウをFXMLから生成
 			this.mainWindow = new WindowManager<MainPaneController>("mainWindow", fxmlFilePathsProperties.getProperty("MainPane"), primaryStage, Integer.parseInt(mainWindowProperties.getProperty("width")), Integer.parseInt(mainWindowProperties.getProperty("height")));
 
-			// メインウィンドウのコントローラにStageを保持する
-			this.mainWindow.getController().setStage(this.mainWindow.getStage());
+			// メインウィンドウのコントローラにウィンドウを保持する
+			this.mainWindow.getController().setWindow(this.mainWindow);
 
 			// メインウィンドウのタイトル設定
 			this.mainWindow.getStage().setTitle(mainWindowProperties.getProperty("title"));

@@ -18,6 +18,14 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	protected WindowManager<MainPaneController> mainWindow;
 
 	/**
+	 * キー入力を検知するかどうかのフラグ。
+	 * true=入力を検知する、false=入力を検知しない
+	 * 設定ウィンドウ等のモーダルウィンドウを開いてもJNativeHookのキー入力イベントは発生してしまうため、
+	 * 一時的に入力に対する処理をしたくない時に使用。
+	 */
+	protected boolean isDetectInput = true;
+
+	/**
 	 * コンストラクタ。
 	 * @param controllers コントローラを格納したマップ(コントローラ外からPaneの各コントロールを操作するために使う)
 	 */
@@ -31,8 +39,11 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event イベント発生時の各種情報(どのキーが押されたか等)
 	 */
 	public void nativeKeyPressed(NativeKeyEvent event) {
-//		System.out.println(event.paramString());
-		// 現状、特に処理なし
+		// キー入力検知フラグが立っていれば
+		if (this.isDetectInput) {
+//			System.out.println(event.paramString());
+			// 現状、特に処理なし
+		}
 	}
 
 	/**
@@ -40,23 +51,26 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event イベント発生時の各種情報(どのキーが離されたか等)
 	 */
 	public void nativeKeyReleased(NativeKeyEvent event) {
-//		System.out.println(event.paramString());
+		// キー入力検知フラグが立っていれば
+		if (this.isDetectInput) {
+//			System.out.println(event.paramString());
 
-		// メインペインのコントローラ取得
-		MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
+			// メインペインのコントローラ取得
+			MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
 
-		// 離されたキーに対応する処理
-		switch (event.getKeyCode()) {
-			// \(バックスラッシュ)
-			case NativeKeyEvent.VC_BACK_SLASH:
-				// メインペインにある夜戦突入・追撃せず画像を切り替える
-				mainPaneController.toggleNightBattleImageView();
-				break;
-			// ^
-			case NativeKeyEvent.VC_QUOTE:
-				// メインペインにある進撃・撤退画像を切り替える
-				mainPaneController.toggleAttackImageView();
-				break;
+			// 離されたキーに対応する処理
+			switch (event.getKeyCode()) {
+				// \(バックスラッシュ)
+				case NativeKeyEvent.VC_BACK_SLASH:
+					// メインペインにある夜戦突入・追撃せず画像を切り替える
+					mainPaneController.toggleNightBattleImageView();
+					break;
+				// ^
+				case NativeKeyEvent.VC_QUOTE:
+					// メインペインにある進撃・撤退画像を切り替える
+					mainPaneController.toggleAttackImageView();
+					break;
+			}
 		}
 	}
 
@@ -65,7 +79,10 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event イベント発生時の各種情報(どのキーがタイプされたか等)
 	 */
 	public void nativeKeyTyped(NativeKeyEvent event) {
-//		System.out.println(event.paramString());
-		// 現状、特に処理なし
+		// キー入力検知フラグが立っていれば
+		if (this.isDetectInput) {
+//			System.out.println(event.paramString());
+			// 現状、特に処理なし
+		}
 	}
 }

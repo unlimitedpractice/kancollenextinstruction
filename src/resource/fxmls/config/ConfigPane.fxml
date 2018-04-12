@@ -4,9 +4,8 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<Pane id="configPane" fx:id="configPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane id="configPane" fx:id="configPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ConfigPaneController">
    <children>
-      <Label alignment="CENTER" text="設定ウィンドウ(仮)" textAlignment="CENTER" />
+      <Label id="configLabel001" fx:id="configLabel001" alignment="CENTER" text="設定ウィンドウ(仮)" textAlignment="CENTER" />
    </children>
 </Pane>

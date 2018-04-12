@@ -3,6 +3,8 @@ package utils;
 import java.io.InputStream;
 
 import application.Main;
+import controllers.BaseController;
+import input.JNativeHookKeyListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,7 +44,18 @@ public class WindowManager<T> {
 	protected T controller;
 
 	/**
-	 * コンストラクタ(根元のウィンドウを開く場合)
+	 * 親ウィンドウのWindowManagerクラスインスタンス
+	 */
+	protected WindowManager<? extends BaseController> parentWindow;
+
+	/**
+	 * JNativeHookのイベントリスナクラス。
+	 * 入力検知の一時停止等に使用。
+	 */
+	protected JNativeHookKeyListener jNativeHookKeyListener;
+
+	/**
+	 * コンストラクタ
 	 * fxmlPathで指定されたFXMLを読み込む
 	 * @param windowId ウィンドウID(ウィンドウを複数格納したマップから取り出す時に使うID)
 	 * @param fxmlPath 読み込むFXMLのパス
@@ -110,6 +123,14 @@ public class WindowManager<T> {
 	 */
 	public T getController() {
 		return this.controller;
+	}
+
+	/**
+	 * 親ウィンドウをセットする
+	 * @param parentWindow 親ウィンドウのウィンドウ管理クラス
+	 */
+	public void setParentWindow(WindowManager<? extends BaseController> parentWindow) {
+		this.parentWindow = parentWindow;
 	}
 
 	/**
