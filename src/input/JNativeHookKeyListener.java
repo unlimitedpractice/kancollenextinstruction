@@ -1,9 +1,12 @@
 package input;
 
+import java.util.Properties;
+
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import controllers.MainPaneController;
+import utils.PropertiesUtil;
 import utils.WindowManager;
 
 /**
@@ -11,6 +14,11 @@ import utils.WindowManager;
  * @author 皇翔(Shou Sumeragi)
  */
 public class JNativeHookKeyListener implements NativeKeyListener {
+	/**
+	 * キー入力に関するプロパティファイルを読み込むクラス
+	 */
+	protected Properties keyConfigProperties;
+
 	/**
 	 * コンストラクタで渡されたメインウィンドウの管理クラスを保持するプロパティ。
 	 * このクラスからメインウィンドウとその配下を操作するために使用
@@ -30,6 +38,9 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param controllers コントローラを格納したマップ(コントローラ外からPaneの各コントロールを操作するために使う)
 	 */
 	public JNativeHookKeyListener(WindowManager<MainPaneController> mainWindow) {
+		// キー入力に関するプロパティファイルを読み込む
+		this.keyConfigProperties = PropertiesUtil.loadPropertiesFile("KeyConfig");
+
 		// 渡されたウィンドウを保持する
 		this.mainWindow = mainWindow;
 	}
@@ -71,21 +82,18 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 		if (this.isDetectInput) {
 //			System.out.println(event.paramString());
 
-			// メインペインのコントローラ取得
+			// メインウィンドウのルートペインのコントローラ取得
 			MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
 
-			// 離されたキーに対応する処理
-			switch (event.getKeyCode()) {
-				// \(バックスラッシュ)
-				case NativeKeyEvent.VC_BACK_SLASH:
-					// メインペインにある夜戦突入・追撃せず画像を切り替える
-					mainPaneController.toggleNightBattleImageView();
-					break;
-				// ^
-				case NativeKeyEvent.VC_QUOTE:
-					// メインペインにある進撃・撤退画像を切り替える
-					mainPaneController.toggleAttackImageView();
-					break;
+			// 進撃・撤退切替キーが離されたら
+			if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("attackChangeKeyCode"))) {
+				// メインペインにある夜戦突入・追撃せず画像を切り替える
+				mainPaneController.toggleAttackImageView();
+			} else if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("nightBattleChangeKeyCode"))) {
+				// 夜戦突入・追撃せず切替キーが離されたら
+
+				// メインペインにある夜戦突入・追撃せず画像を切り替える
+				mainPaneController.toggleNightBattleImageView();
 			}
 		}
 	}

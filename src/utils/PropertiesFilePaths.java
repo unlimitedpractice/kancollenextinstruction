@@ -32,9 +32,10 @@ public enum PropertiesFilePaths {
 	ImagePaths("resource/propertiesfiles/ImagePaths.properties"),
 
 	/**
-	 * コントローラマップからコントローラを取得する際の名前設定プロパティファイルのパス
+	 * キー入力に関する設定プロパティファイルのパス
 	 */
-	ControllerNames("resource/propertiesfiles/ControllerNames.properties");
+	KeyConfig("resource/propertiesfiles/KeyConfig.properties");
+
 
 	/**
 	 * フィールドの定義。
