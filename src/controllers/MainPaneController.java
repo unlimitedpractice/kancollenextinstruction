@@ -9,13 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.WindowEvent;
 import utils.PropertiesUtil;
 import utils.WindowManager;
 
 /**
- * メインペインのコントローラクラス
+ * メインウィンドウのルートペインのコントローラクラス
  * @author 皇翔(Shou Sumeragi)
  */
 public class MainPaneController extends BaseController implements Initializable {
@@ -55,6 +56,11 @@ public class MainPaneController extends BaseController implements Initializable 
 	 * 設定ウィンドウのプロパティファイルを読み込むクラス
 	 */
 	Properties configWindowProperties;
+
+	/**
+	 * メインウィンドウのルートペイン
+	 */
+	public Pane mainPane;
 
 	/**
 	 * 進撃・撤退の画像を表示するImageView
@@ -210,7 +216,7 @@ public class MainPaneController extends BaseController implements Initializable 
 			configWindowOnClose(event);
 		});
 
-		// 設定ウィンドウのステージを表示
+		// 設定ウィンドウを表示
 		this.configWindow.showWindow();
 	}
 
