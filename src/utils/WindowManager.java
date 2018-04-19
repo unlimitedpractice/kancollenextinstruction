@@ -39,7 +39,7 @@ public class WindowManager<T> {
 
 	/**
 	 * コントローラ(正確にはルートペインのコントローラ)
-	 * コントローラはそれぞれ別のクラスによって作られる(全て型が違う)ので、Object型のプロパティに保持しておき、使用時にキャストする
+	 * コントローラはそれぞれ別のクラスによって作られる(全て型が違う)ので、ジェネリクスによる型が柔軟なプロパティに保持しておき、使用時にキャストする
 	 */
 	protected T controller;
 
@@ -94,6 +94,15 @@ public class WindowManager<T> {
 	}
 
 	/**
+	 * ウィンドウを表示する
+	 */
+	public void showWindow() {
+		this.stage.show();
+	}
+
+	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//
+
+	/**
 	 * this.windowIdのゲッター
 	 * @return ウィンドウIDを返す。
 	 */
@@ -127,7 +136,7 @@ public class WindowManager<T> {
 
 	/**
 	 * jNativeHookKeyListenerのセッター
-	 * @param jNativeHookKeyListener
+	 * @param jNativeHookKeyListener JNativeHookのキーイベントリスナ
 	 */
 	public void setJNativeHookKeyListener(JNativeHookKeyListener jNativeHookKeyListener) {
 		this.jNativeHookKeyListener = jNativeHookKeyListener;
@@ -146,7 +155,11 @@ public class WindowManager<T> {
 	 * @param parentWindow 親ウィンドウのウィンドウ管理クラス
 	 */
 	public void setParentWindow(WindowManager<? extends BaseController> parentWindow) {
+		// 親ウィンドウのウィンドウ管理クラスをセット
 		this.parentWindow = parentWindow;
+
+		// 親ウィンドウのステージをこのウィンドウのオーナーとする
+		this.stage.initOwner(parentWindow.getStage());
 	}
 
 	/**
@@ -155,12 +168,5 @@ public class WindowManager<T> {
 	 */
 	public void setWindowTitle(String windowTitle) {
 		this.stage.setTitle(windowTitle);
-	}
-
-	/**
-	 * ウィンドウを表示する
-	 */
-	public void showWindow() {
-		this.stage.show();
 	}
 }

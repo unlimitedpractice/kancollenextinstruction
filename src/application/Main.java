@@ -57,9 +57,6 @@ public class Main extends Application {
 				onClose(event);
 			});
 
-			// メインウィンドウを表示
-			this.mainWindow.showWindow();
-
 			try {
 				// JNativeHookのログレベルをOFFに変えて、通常ログが大量に出ないようにする
 				Logger jNativeHookLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
@@ -78,6 +75,9 @@ public class Main extends Application {
 			GlobalScreen.addNativeKeyListener(jNativeHookKeyListener);
 			// リスナをウィンドウに保持
 			this.mainWindow.setJNativeHookKeyListener(jNativeHookKeyListener);
+
+			// メインウィンドウを表示
+			this.mainWindow.showWindow();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

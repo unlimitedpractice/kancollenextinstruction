@@ -5,7 +5,9 @@ import java.util.Properties;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+import controllers.ConfigPaneController;
 import controllers.MainPaneController;
+import javafx.application.Platform;
 import utils.PropertiesUtil;
 import utils.WindowManager;
 
@@ -14,6 +16,21 @@ import utils.WindowManager;
  * @author 皇翔(Shou Sumeragi)
  */
 public class JNativeHookKeyListener implements NativeKeyListener {
+	/**
+	 * クラス内定数 キー入力検知のモード「入力検知をしないモード」。
+	 */
+	public static final int DETECT_INPUT_MODE_STOP = 0;
+
+	/**
+	 * クラス内定数 キー入力検知のモード「画像切替のための検知モード」。
+	 */
+	public static final int DETECT_INPUT_MODE_ACTIVE = 1;
+
+	/**
+	 * クラス内定数 キー入力の検知モード「キー設定のための検知モード」
+	 */
+	public static final int DETECT_INPUT_MODE_KEYCONFIG = 2;
+
 	/**
 	 * キー入力に関するプロパティファイルを読み込むクラス
 	 */
@@ -26,16 +43,20 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	protected WindowManager<MainPaneController> mainWindow;
 
 	/**
-	 * キー入力を検知するかどうかのフラグ。
-	 * true=入力を検知する、false=入力を検知しない
-	 * 設定ウィンドウ等のモーダルウィンドウを開いてもJNativeHookのキー入力イベントは発生してしまうため、
-	 * 一時的に入力に対する処理をしたくない時に使用。
+	 * コンフィグウィンドウの管理クラスを保持するプロパティ。
+	 * (コンフィグウィンドウが開いた時に渡される)
 	 */
-	protected boolean isDetectInput = true;
+	protected WindowManager<ConfigPaneController> configWindow;
+
+	/**
+	 * キー入力の検知モード。
+	 * ※設定される値とその意味については クラス内定数 DETECT_INPUT_MODE_...を参照。
+	 */
+	protected int detectInputMode = JNativeHookKeyListener.DETECT_INPUT_MODE_ACTIVE;
 
 	/**
 	 * コンストラクタ。
-	 * @param controllers コントローラを格納したマップ(コントローラ外からPaneの各コントロールを操作するために使う)
+	 * @param mainWindow メインウィンドウのウィンドウ管理クラス
 	 */
 	public JNativeHookKeyListener(WindowManager<MainPaneController> mainWindow) {
 		// キー入力に関するプロパティファイルを読み込む
@@ -46,31 +67,11 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	}
 
 	/**
-	 * isDetectInputのゲッター
-	 * @return キー入力を検知するかどうかのフラグ(true=入力を検知する、false=入力を検知しない)
-	 */
-	public boolean getIsDetectInput() {
-		return this.isDetectInput;
-	}
-
-	/**
-	 * isDetectInputのセッター
-	 * @param isDetectInput キー入力を検知するかどうかのフラグ(true=入力を検知する、false=入力を検知しない)
-	 */
-	public void setIsDetectInput(boolean isDetectInput) {
-		this.isDetectInput = isDetectInput;
-	}
-
-	/**
 	 * キーが押された際の処理
 	 * @param event イベント発生時の各種情報(どのキーが押されたか等)
 	 */
 	public void nativeKeyPressed(NativeKeyEvent event) {
-		// キー入力検知フラグが立っていれば
-		if (this.isDetectInput) {
-//			System.out.println(event.paramString());
-			// 現状、特に処理なし
-		}
+		// 現状、特に処理なし
 	}
 
 	/**
@@ -78,23 +79,17 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event イベント発生時の各種情報(どのキーが離されたか等)
 	 */
 	public void nativeKeyReleased(NativeKeyEvent event) {
-		// キー入力検知フラグが立っていれば
-		if (this.isDetectInput) {
-//			System.out.println(event.paramString());
+		// キー入力の検知モードに対応する処理を実行
+		switch (this.detectInputMode) {
+		// 画像切替のための検知モードなら
+		case JNativeHookKeyListener.DETECT_INPUT_MODE_ACTIVE:
+			this.modeActiveProcessing(event);
+			break;
 
-			// メインウィンドウのルートペインのコントローラ取得
-			MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
-
-			// 進撃・撤退切替キーが離されたら
-			if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("attackChangeKeyCode"))) {
-				// メインペインにある夜戦突入・追撃せず画像を切り替える
-				mainPaneController.toggleAttackImageView();
-			} else if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("nightBattleChangeKeyCode"))) {
-				// 夜戦突入・追撃せず切替キーが離されたら
-
-				// メインペインにある夜戦突入・追撃せず画像を切り替える
-				mainPaneController.toggleNightBattleImageView();
-			}
+		// キー設定のための検知モードなら
+		case JNativeHookKeyListener.DETECT_INPUT_MODE_KEYCONFIG:
+			this.modeKeyconfigProcessing(event);
+			break;
 		}
 	}
 
@@ -103,10 +98,95 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event イベント発生時の各種情報(どのキーがタイプされたか等)
 	 */
 	public void nativeKeyTyped(NativeKeyEvent event) {
-		// キー入力検知フラグが立っていれば
-		if (this.isDetectInput) {
-//			System.out.println(event.paramString());
-			// 現状、特に処理なし
+		// 現状、特に処理なし
+	}
+
+	/**
+	 * キー入力の検知モードが画像切替のための検知モードになっている場合の処理
+	 * @param event キー入力イベント発生時の各種情報
+	 */
+	protected void modeActiveProcessing(NativeKeyEvent event) {
+		// メインウィンドウのルートペインのコントローラ取得
+		MainPaneController mainPaneController = (MainPaneController)this.mainWindow.getController();
+
+		// 進撃・撤退切替キーが離されたら
+		if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("attackChangeKeyCode"))) {
+			// メインペインにある夜戦突入・追撃せず画像を切り替える
+			mainPaneController.toggleAttackImageView();
+		} else if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("nightBattleChangeKeyCode"))) {
+			// 夜戦突入・追撃せず切替キーが離されたら
+
+			// メインペインにある夜戦突入・追撃せず画像を切り替える
+			mainPaneController.toggleNightBattleImageView();
 		}
+	}
+
+	/**
+	 * キー入力の検知モードがキー設定のための検知モードになっている場合の処理
+	 * @param event キー入力イベント発生時の各種情報
+	 */
+	protected void modeKeyconfigProcessing(NativeKeyEvent event) {
+		System.out.println("キー設定入力検知:" + event.paramString());
+
+		// TODO JNativeHookで認識できないキー(getKeyCode=0になる)の場合は設定を反映しない
+
+		// TODO 入力されたキーを設定対象のキーとして保存する
+
+		// キー設定完了なので、設定中のフラグを下げる
+		this.configWindow.getController().setNowKeyConfiging(false);
+
+		// JNativeHookのキー入力検知モードを検知しないモードに変える
+		this.detectInputMode = JNativeHookKeyListener.DETECT_INPUT_MODE_STOP;
+
+
+		// 外部スレッドからのUI操作となるものは、Platform.runLaterを介して実行する
+		JNativeHookKeyListener jNativeHookKeyListener = this;
+		Platform.runLater(() -> {
+			// 入力されたキーのキー名を設定対象のTextFieldに反映する
+			jNativeHookKeyListener.configWindow.getController().getTextFieldOfConfigTarget().setText(NativeKeyEvent.getKeyText(event.getKeyCode()));
+
+			// 設定対象のTextFiledを保持しているプロパティをクリア
+			jNativeHookKeyListener.configWindow.getController().setTextFieldOfConfigTarget(null);
+
+			// 完了ボタンを押せるようにする
+			jNativeHookKeyListener.configWindow.getController().completeButton.setDisable(false);
+
+			// キー設定対象項目のTextFieldからフォーカスを外す(正確には、TextFieldから外すことはできないので、完了ボタンにフォーカスを移す)
+			jNativeHookKeyListener.configWindow.getController().completeButton.requestFocus();
+		});
+	}
+
+	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//
+
+	/**
+	 * detectInputModeのゲッター
+	 * @return キー入力の検知モード(値の意味についてはクラス内定数 DETECT_INPUT_MODE_...を参照)
+	 */
+	public int getDetectInputMode() {
+		return this.detectInputMode;
+	}
+
+	/**
+	 * detectInputModeのセッター
+	 * @param detectInputMode キー入力の検知モード(値の意味についてはクラス内定数 DETECT_INPUT_MODE_...を参照)
+	 */
+	public void setDetectInputMode(int detectInputMode) {
+		this.detectInputMode = detectInputMode;
+	}
+
+	/**
+	 * confingWindowのゲッター
+	 * @return 設定ウィンドウのウィンドウ管理クラスを返す
+	 */
+	public WindowManager<ConfigPaneController> getConfigWindow() {
+		return this.configWindow;
+	}
+
+	/**
+	 * configWindowのセッター
+	 * @param configWindow 設定ウィンドウのウィンドウ管理クラス
+	 */
+	public void setConfigWindow(WindowManager<ConfigPaneController> configWindow) {
+		this.configWindow = configWindow;
 	}
 }

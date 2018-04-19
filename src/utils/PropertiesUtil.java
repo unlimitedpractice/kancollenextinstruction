@@ -13,7 +13,7 @@ import java.util.Properties;
 public class PropertiesUtil {
 	/**
 	 * EnumeratorNameで指定された列挙子名の列挙子に付与された値(ファイルパス)でプロパティファイルを読み込む。
-	 * ※列挙子はutils.PropertiesUtilに定義されている。
+	 * ※列挙子はutils.PropertiesFilePathsに定義されている。
 	 * ※プロパティファイルの文字コードはUTF-8であること前提
 	 * @param EnumeratorName 列挙子名。読み込みたいプロパティファイルのパスが付与された列挙子の列挙子名を指定する
 	 * @return Properties プロパティファイルの読み込みが完了したPropertiesオブジェクト

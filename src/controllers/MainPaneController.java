@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import input.JNativeHookKeyListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -24,23 +25,23 @@ public class MainPaneController extends BaseController implements Initializable 
 	 * クラス内定数。「進撃・撤退のImageViewでどの画像が表示されているか」
 	 * 進撃の画像が表示されている
 	 */
-	private static final int ATTACKIMG_TYPE_ATTACK = 1;
+	public static final int ATTACKIMG_TYPE_ATTACK = 1;
 	/**
 	 * クラス内定数。「進撃・撤退のImageViewでどの画像が表示されているか」
 	 * 撤退の画像が表示されている
 	 */
-	private static final int ATTACKIMG_TYPE_WITHDRAWAL = 2;
+	public static final int ATTACKIMG_TYPE_WITHDRAWAL = 2;
 
 	/**
 	 * クラス内定数。「夜戦突入・追撃せずのImageViewでどの画像が表示されているか」
 	 * 夜戦突入の画像が表示されている
 	 */
-	private static final int NIGHTBATTLEIMG_TYPE_NIGHTBATTLE = 3;
+	public static final int NIGHTBATTLEIMG_TYPE_NIGHTBATTLE = 3;
 	/**
 	 * クラス内定数。「夜戦突入・追撃せずのImageViewでどの画像が表示されているか」
 	 * 追撃せずの画像が表示されている
 	 */
-	private static final int NIGHTBATTLEIMG_TYPE_DONOTPURSUE = 4;
+	public static final int NIGHTBATTLEIMG_TYPE_DONOTPURSUE = 4;
 
 	/**
 	 * FXMLファイルのパスが設定されたプロパティファイルを読み込むクラス
@@ -203,15 +204,20 @@ public class MainPaneController extends BaseController implements Initializable 
 
 		// 設定ウィンドウのコントローラに設定ウィンドウのウィンドウクラスを保持
 		this.configWindow.getController().setWindow(this.configWindow);
+
 		// 設定ウィンドウの親ウィンドウをセット
 		this.configWindow.setParentWindow(this.window);
+
 		// JNativeHookのキーイベントリスナを設定ウィンドウに保持
 		this.configWindow.setJNativeHookKeyListener(this.window.getJNativeHookKeyListener());
 
-		// JNativeHookのキー入力検知を一時停止する
-		this.window.getJNativeHookKeyListener().setIsDetectInput(false);
+		// JNativeHookのキーイベントリスナに設定ウィンドウのウィンドウ管理クラスを保持
+		this.window.getJNativeHookKeyListener().setConfigWindow(this.configWindow);
 
-		// 設定ウィンドウが閉じられた時の処理を登録
+		// JNativeHookのキー入力検知を一時停止する
+		this.window.getJNativeHookKeyListener().setDetectInputMode(JNativeHookKeyListener.DETECT_INPUT_MODE_STOP);
+
+		// 設定ウィンドウが閉じられた時の処理をイベント登録
 		this.configWindow.getStage().setOnCloseRequest((WindowEvent event) -> {
 			configWindowOnClose(event);
 		});
@@ -248,9 +254,12 @@ public class MainPaneController extends BaseController implements Initializable 
 
 	/**
 	 * 設定ウィンドウが閉じられた時の処理
+	 * @param event 設定ウィンドウが閉じられた時に発生するイベントの各種情報
 	 */
 	public void configWindowOnClose(WindowEvent event) {
 		// JNativeHookのキー入力検知を再開する
-		this.configWindow.getJNativeHookKeyListener().setIsDetectInput(true);
+		this.configWindow.getJNativeHookKeyListener().setDetectInputMode(JNativeHookKeyListener.DETECT_INPUT_MODE_ACTIVE);
 	}
+
+	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//
 }

@@ -54,14 +54,6 @@ public enum PropertiesFilePaths {
 	}
 
 	/**
-	 * 列挙子に付与された値を返す
-	 * @return String 列挙子に付与された値
-	 */
-	public String getValue() {
-		return this.value;
-	}
-
-	/**
 	 * EnumeratorNameで指定された列挙子名の列挙子に付与された値を返す
 	 * @param EnumeratorName 値を取り出したい列挙子の列挙子名
 	 * @return String EnumeratorNameで指定された列挙子名の列挙子に付与された値
@@ -77,5 +69,15 @@ public enum PropertiesFilePaths {
 
 		// 指定された列挙子名の列挙子が見つからなければnullを返す
 		 return null;
+	}
+
+	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//
+
+	/**
+	 * 列挙子に付与された値を返す
+	 * @return String 列挙子に付与された値
+	 */
+	public String getValue() {
+		return this.value;
 	}
 }

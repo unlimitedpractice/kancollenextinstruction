@@ -10,11 +10,12 @@
       <Label id="keyConfigHeadlineLabel" fx:id="keyConfigHeadlineLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" text="キー設定" textAlignment="CENTER" />
       <Separator id="keyConfigSeparator" fx:id="keyConfigSeparator" layoutX="14.0" layoutY="42.0" prefHeight="0.0" prefWidth="269.0" />
       <Label id="keyConfigAttackLabel" fx:id="keyConfigAttackLabel" layoutX="24.0" layoutY="53.0" text="進撃・撤退切替" />
-      <TextField id="keyConfigAttackTextField" fx:id="keyConfigAttackTextField" layoutX="182.0" layoutY="47.0" prefHeight="37.0" prefWidth="101.0" />
+      <TextField id="keyConfigAttackTextField" fx:id="keyConfigAttackTextField" editable="false" layoutX="182.0" layoutY="47.0" prefHeight="37.0" prefWidth="101.0" />
       <Label id="keyConfigNightBattleLabel" fx:id="keyConfigNightBattleLabel" layoutX="24.0" layoutY="101.0" text="夜戦突入・追撃せず切替">
          <font>
             <Font size="14.0" />
          </font></Label>
-      <TextField id="keyConfigNightBattleTextField" fx:id="keyConfigNightBattleTextField" layoutX="182.0" layoutY="95.0" prefHeight="37.0" prefWidth="101.0" />
+      <TextField id="keyConfigNightBattleTextField" fx:id="keyConfigNightBattleTextField" editable="false" layoutX="182.0" layoutY="95.0" prefHeight="37.0" prefWidth="101.0" />
+      <Button id="completeButton" fx:id="completeButton" layoutX="120.0" layoutY="249.0" mnemonicParsing="false" onAction="#completeButtonOnAction" text="完了" />
    </children>
 </Pane>
