@@ -55,11 +55,11 @@ public class WindowManager<T> {
 	protected JNativeHookKeyListener jNativeHookKeyListener;
 
 	/**
-	 * コンストラクタ
-	 * fxmlPathで指定されたFXMLを読み込む
-	 * @param windowId ウィンドウID(ウィンドウを複数格納したマップから取り出す時に使うID)
+	 * コンストラクタ。
+	 * fxmlPathで指定されたFXMLを読み込み、ウィンドウ(Stage)を作成する。
+	 * @param windowId 一意なウィンドウのID(現状、使用していないが、将来的にウィンドウ管理クラスのインスタンスをマップに展開した時等に各ウィンドウを識別するために必要になる可能性があるので用意)
 	 * @param fxmlPath 読み込むFXMLのパス
-	 * @param primaryStage 根元のウィンドウを扱う場合、startメソッドの引数primaryStageをこの引数に渡す。nullを渡した場合は子ウィンドウを扱うものとして新しいStageを生成する
+	 * @param primaryStage 根元のウィンドウを扱う場合、application.Main.startメソッドの引数primaryStageをこの引数に渡す。nullを渡した場合は子ウィンドウを扱うものとして新しいStageを生成する
 	 * @param width ウィンドウ横幅
 	 * @param height ウィンドウ縦幅
 	 */

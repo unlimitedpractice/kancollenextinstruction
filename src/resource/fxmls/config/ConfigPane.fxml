@@ -5,17 +5,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane id="configPane" fx:id="configPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ConfigPaneController">
+<Pane id="configPane" fx:id="configPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ConfigPaneController">
    <children>
       <Label id="keyConfigHeadlineLabel" fx:id="keyConfigHeadlineLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" text="キー設定" textAlignment="CENTER" />
-      <Separator id="keyConfigSeparator" fx:id="keyConfigSeparator" layoutX="14.0" layoutY="42.0" prefHeight="0.0" prefWidth="269.0" />
+      <Separator id="keyConfigSeparator" fx:id="keyConfigSeparator" layoutX="14.0" layoutY="43.0" prefHeight="2.0" prefWidth="322.0" />
       <Label id="keyConfigAttackLabel" fx:id="keyConfigAttackLabel" layoutX="24.0" layoutY="53.0" text="進撃・撤退切替" />
-      <TextField id="keyConfigAttackTextField" fx:id="keyConfigAttackTextField" editable="false" layoutX="182.0" layoutY="47.0" prefHeight="37.0" prefWidth="101.0" />
-      <Label id="keyConfigNightBattleLabel" fx:id="keyConfigNightBattleLabel" layoutX="24.0" layoutY="101.0" text="夜戦突入・追撃せず切替">
-         <font>
-            <Font size="14.0" />
-         </font></Label>
-      <TextField id="keyConfigNightBattleTextField" fx:id="keyConfigNightBattleTextField" editable="false" layoutX="182.0" layoutY="95.0" prefHeight="37.0" prefWidth="101.0" />
-      <Button id="completeButton" fx:id="completeButton" layoutX="120.0" layoutY="249.0" mnemonicParsing="false" onAction="#completeButtonOnAction" text="完了" />
+      <TextField id="keyConfigAttackTextField" fx:id="keyConfigAttackTextField" editable="false" layoutX="223.0" layoutY="47.0" prefHeight="37.0" prefWidth="101.0" />
+      <Label id="keyConfigNightBattleLabel" fx:id="keyConfigNightBattleLabel" layoutX="24.0" layoutY="101.0" text="夜戦突入・追撃せず切替" />
+      <TextField id="keyConfigNightBattleTextField" fx:id="keyConfigNightBattleTextField" editable="false" layoutX="223.0" layoutY="92.0" prefHeight="37.0" prefWidth="101.0" />
+      <Button id="completeButton" fx:id="completeButton" layoutX="145.0" layoutY="249.0" mnemonicParsing="false" onAction="#completeButtonOnAction" text="完了" />
+      <Label id="descriptionLabel" fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="18.0" layoutY="157.0" prefHeight="77.0" prefWidth="315.0" text="設定したい項目のテキストフィールドをクリックしてください。" wrapText="true" />
    </children>
 </Pane>

@@ -126,34 +126,47 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 * @param event キー入力イベント発生時の各種情報
 	 */
 	protected void modeKeyconfigProcessing(NativeKeyEvent event) {
-		System.out.println("キー設定入力検知:" + event.paramString());
+		// 有効なキーが入力されたら
+		if (event.getKeyCode() != 0) {
+			// TODO 入力されたキーを設定対象のキーとして保存する
 
-		// TODO JNativeHookで認識できないキー(getKeyCode=0になる)の場合は設定を反映しない
+			// キー設定完了なので、設定中のフラグを下げる
+			this.configWindow.getController().setNowKeyConfiging(false);
 
-		// TODO 入力されたキーを設定対象のキーとして保存する
-
-		// キー設定完了なので、設定中のフラグを下げる
-		this.configWindow.getController().setNowKeyConfiging(false);
-
-		// JNativeHookのキー入力検知モードを検知しないモードに変える
-		this.detectInputMode = JNativeHookKeyListener.DETECT_INPUT_MODE_STOP;
+			// JNativeHookのキー入力検知モードを検知しないモードに変える
+			this.detectInputMode = JNativeHookKeyListener.DETECT_INPUT_MODE_STOP;
 
 
-		// 外部スレッドからのUI操作となるものは、Platform.runLaterを介して実行する
-		JNativeHookKeyListener jNativeHookKeyListener = this;
-		Platform.runLater(() -> {
-			// 入力されたキーのキー名を設定対象のTextFieldに反映する
-			jNativeHookKeyListener.configWindow.getController().getTextFieldOfConfigTarget().setText(NativeKeyEvent.getKeyText(event.getKeyCode()));
+			// 外部スレッドからのUI操作となるものは、Platform.runLaterを介して実行する
+			JNativeHookKeyListener jNativeHookKeyListener = this;
+			Platform.runLater(() -> {
+				// 入力されたキーのキー名を設定対象のTextFieldに反映する
+				jNativeHookKeyListener.configWindow.getController().getTextFieldOfConfigTarget().setText(NativeKeyEvent.getKeyText(event.getKeyCode()));
 
-			// 設定対象のTextFiledを保持しているプロパティをクリア
-			jNativeHookKeyListener.configWindow.getController().setTextFieldOfConfigTarget(null);
+				// 設定対象のTextFiledを保持しているプロパティをクリア
+				jNativeHookKeyListener.configWindow.getController().setTextFieldOfConfigTarget(null);
 
-			// 完了ボタンを押せるようにする
-			jNativeHookKeyListener.configWindow.getController().completeButton.setDisable(false);
+				// 完了ボタンを押せるようにする
+				jNativeHookKeyListener.configWindow.getController().completeButton.setDisable(false);
 
-			// キー設定対象項目のTextFieldからフォーカスを外す(正確には、TextFieldから外すことはできないので、完了ボタンにフォーカスを移す)
-			jNativeHookKeyListener.configWindow.getController().completeButton.requestFocus();
-		});
+				// 設定が完了した旨を文字色:青で表示する
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setText(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingComplete"));
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle("-fx-text-fill: #0000ff;");
+
+				// キー設定対象項目のTextFieldからフォーカスを外す(正確には、TextFieldから外すことはできないので、完了ボタンにフォーカスを移す)
+				jNativeHookKeyListener.configWindow.getController().completeButton.requestFocus();
+			});
+		} else {
+			// 無効なキーが入力されたら
+
+			// 外部スレッドからのUI操作となるものは、Platform.runLaterを介して実行する
+			JNativeHookKeyListener jNativeHookKeyListener = this;
+			Platform.runLater(() -> {
+				// そのキーが使えない旨を文字色:赤で表示する
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setText(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingInvalidKey"));
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle("-fx-text-fill: #ff0000;");
+			});
+		}
 	}
 
 	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//

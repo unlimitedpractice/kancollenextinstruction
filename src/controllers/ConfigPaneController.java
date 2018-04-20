@@ -24,9 +24,14 @@ import utils.PropertiesUtil;
  */
 public class ConfigPaneController extends BaseController implements Initializable {
 	/**
+	 * 設定ウィンドウに関する設定プロパティファイルを読み込むクラス
+	 */
+	protected Properties configWindowProperties;
+
+	/**
 	 * キー入力に関する設定プロパティファイルを読み込むクラス
 	 */
-	Properties keyConfigProperties;
+	private Properties keyConfigProperties;
 
 	/**
 	 * 設定ウィンドウのルートペイン
@@ -84,6 +89,11 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	protected TextField textFieldOfConfigTarget;
 
 	/**
+	 * 説明テキストのLabel
+	 */
+	public Label descriptionLabel;
+
+	/**
 	 * 完了ボタン
 	 */
 	public Button completeButton;
@@ -92,6 +102,9 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	 * 初期化処理
 	 */
 	public void initialize(URL location, ResourceBundle resources) {
+		// 設定ウィンドウに関する設定プロパティファイルを読み込む
+		this.configWindowProperties = PropertiesUtil.loadPropertiesFile("ConfigWindow");
+
 		// デフォルトのままだと、設定ウィンドウが開いた時にTextFieldへフォーカスがいってしまうので外す(クリックしてからキーを押すことでそのキーコードが設定項目に適用されるという形を採るため自動的にフォーカスがいくのは邪魔になる)
 		this.keyConfigAttackTextField.setFocusTraversable(false);
 		this.keyConfigNightBattleTextField.setFocusTraversable(false);
@@ -141,6 +154,10 @@ public class ConfigPaneController extends BaseController implements Initializabl
 			// キー設定中の対象項目となるTextFieldをプロパティに保持する
 			this.textFieldOfConfigTarget = textFieldOfConfigTarget;
 
+			// 割り当てたいキーをタップしろという旨を文字色:黒で表示する
+			this.descriptionLabel.setText(this.configWindowProperties.getProperty("descriptionLabelWordingKeyConfiging"));
+			this.descriptionLabel.setStyle("-fx-text-fill: #000000;");
+
 			// 完了ボタンを押せないようにする
 			this.completeButton.setDisable(true);
 
@@ -173,6 +190,14 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	}
 
 	// 以下、ゲッターとセッター---------------------------------------------------------------------------------------//
+
+	/**
+	 * configWindowPropertiesのゲッター
+	 * @return 設定ウィンドウに関する設定プロパティファイルを読み込んだクラスインスタンスを返す
+	 */
+	public Properties getConfigWindowProperties() {
+		return this.configWindowProperties;
+	}
 
 	/**
 	 * nowKeyConfigingのセッター
