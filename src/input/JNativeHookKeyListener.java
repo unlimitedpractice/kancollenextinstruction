@@ -154,7 +154,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 
 				// 設定が完了した旨を文字色:青で表示する
 				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setText(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingComplete"));
-				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle("-fx-text-fill: #0000ff;");
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingCompleteColor"));
 
 				// キー設定対象項目のTextFieldからフォーカスを外す(正確には、TextFieldから外すことはできないので、完了ボタンにフォーカスを移す)
 				jNativeHookKeyListener.configWindow.getController().completeButton.requestFocus();
@@ -167,7 +167,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 			Platform.runLater(() -> {
 				// そのキーが使えない旨を文字色:赤で表示する
 				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setText(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingInvalidKey"));
-				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle("-fx-text-fill: #ff0000;");
+				jNativeHookKeyListener.configWindow.getController().descriptionLabel.setStyle(jNativeHookKeyListener.configWindow.getController().getConfigWindowProperties().getProperty("descriptionLabelWordingInvalidKeyColor"));
 			});
 		}
 	}

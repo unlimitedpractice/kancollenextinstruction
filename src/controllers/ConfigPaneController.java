@@ -124,6 +124,10 @@ public class ConfigPaneController extends BaseController implements Initializabl
 		this.keyConfigAttackTextField.setText(NativeKeyEvent.getKeyText(this.keyConfigAttackValue));           // 進撃・撤退切替キー
 		this.keyConfigNightBattleTextField.setText(NativeKeyEvent.getKeyText(this.keyConfigNightBattleValue)); // 夜戦突入・追撃せず切替キー
 
+		// 説明ラベルにデフォルトの文言をセット
+		this.descriptionLabel.setText(this.configWindowProperties.getProperty("descriptionLabelWordingDefault"));
+		this.descriptionLabel.setStyle(this.configWindowProperties.getProperty("descriptionLabelWordingDefaultColor"));
+
 		// thisを保持(ChangeListenerの中でこの時点でのthisを使うため)
 		ConfigPaneController configPaneController = this;
 
@@ -167,7 +171,7 @@ public class ConfigPaneController extends BaseController implements Initializabl
 
 			// 割り当てたいキーをタップしろという旨を文字色:黒で表示する
 			this.descriptionLabel.setText(this.configWindowProperties.getProperty("descriptionLabelWordingKeyConfiging"));
-			this.descriptionLabel.setStyle("-fx-text-fill: #000000;");
+			this.descriptionLabel.setStyle(this.configWindowProperties.getProperty("descriptionLabelWordingKeyConfigingColor"));
 
 			// 完了ボタンを押せないようにする
 			this.completeButton.setDisable(true);
