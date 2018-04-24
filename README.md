@@ -28,8 +28,9 @@ JavaFXを主に使ったGUIアプリなので<br />
 LinuxやMac等でも動作するとは思うのですが、確証はまったくありません。
 
 ## ダウンロード
-[艦これ Next instruction Ver1.0.0](../images/kancollenextinstruction.zip)<br />
-※任意の場所に解凍して使用してください。
+[リリースページ](./releases) にてバイナリがダウンロードできます。<br />
+<br />
+※ダウンロードしたzipを任意の場所に解凍して使用してください。
 
 ## ビルドする際の注意
 propertiesfilesディレクトリがクラス階層のルートから参照できるように配置・設定してください。<br />
