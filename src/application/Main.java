@@ -1,6 +1,5 @@
 package application;
 
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,10 +34,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			// FXMLファイルのパスが記述されたプロパティファイルを読み込む
-			Properties fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
+			PropertiesUtil fxmlFilePathsProperties = new PropertiesUtil("FxmlFilePaths");
 
 			// メインウィンドウの設定をプロパティファイルから読み込む
-			Properties mainWindowProperties = PropertiesUtil.loadPropertiesFile("MainWindow");
+			PropertiesUtil mainWindowProperties = new PropertiesUtil("MainWindow");
 
 			// メインウィンドウをFXMLから生成
 			this.mainWindow = new WindowManager<MainPaneController>("mainWindow", fxmlFilePathsProperties.getProperty("MainPane"), primaryStage, Integer.parseInt(mainWindowProperties.getProperty("width")), Integer.parseInt(mainWindowProperties.getProperty("height")));

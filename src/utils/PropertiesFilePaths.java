@@ -14,27 +14,27 @@ public enum PropertiesFilePaths {
 	 * 各FXMLファイルのパスを記述したプロパティファイルのパス
 	 *
 	 */
-	FxmlFilePaths("resource/propertiesfiles/FxmlFilePaths.properties"),
+	FxmlFilePaths("propertiesfiles/FxmlFilePaths.properties"),
 
 	/**
 	 * メインウィンドウの各種設定値等を記述したプロパティファイルのパス
 	 */
-	MainWindow("resource/propertiesfiles/MainWindow.properties"),
+	MainWindow("propertiesfiles/MainWindow.properties"),
 
 	/**
 	 * コンフィグウィンドウの各種設定値等を記述したプロパティファイルのパス
 	 */
-	ConfigWindow("resource/propertiesfiles/ConfigWindow.properties"),
+	ConfigWindow("propertiesfiles/ConfigWindow.properties"),
 
 	/**
 	 * 画像ファイルパスを設定するプロパティファイルのパス
 	 */
-	ImagePaths("resource/propertiesfiles/ImagePaths.properties"),
+	ImagePaths("propertiesfiles/ImagePaths.properties"),
 
 	/**
 	 * キー入力に関する設定プロパティファイルのパス
 	 */
-	KeyConfig("resource/propertiesfiles/KeyConfig.properties");
+	KeyConfig("propertiesfiles/KeyConfig.properties");
 
 
 	/**

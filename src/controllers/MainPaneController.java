@@ -2,7 +2,6 @@ package controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import input.JNativeHookKeyListener;
 import javafx.fxml.Initializable;
@@ -46,17 +45,17 @@ public class MainPaneController extends BaseController implements Initializable 
 	/**
 	 * FXMLファイルのパスが設定されたプロパティファイルを読み込むクラス
 	 */
-	Properties fxmlFilePathsProperties;
+	PropertiesUtil fxmlFilePathsProperties;
 
 	/**
 	 * 画像ファイルのパスが設定されたプロパティファイルを読み込むクラス
 	 */
-	Properties imagePathsProperties;
+	PropertiesUtil imagePathsProperties;
 
 	/**
 	 * 設定ウィンドウのプロパティファイルを読み込むクラス
 	 */
-	Properties configWindowProperties;
+	PropertiesUtil configWindowProperties;
 
 	/**
 	 * メインウィンドウのルートペイン
@@ -104,13 +103,13 @@ public class MainPaneController extends BaseController implements Initializable 
 		super();
 
 		// FXMLファイルのパスが記述されたプロパティファイルを読み込む
-		this.fxmlFilePathsProperties = PropertiesUtil.loadPropertiesFile("FxmlFilePaths");
+		this.fxmlFilePathsProperties = new PropertiesUtil("FxmlFilePaths");
 
 		// 画像ファイルのパスを設定するプロパティファイルを読み込む
-		this.imagePathsProperties = PropertiesUtil.loadPropertiesFile("ImagePaths");
+		this.imagePathsProperties = new PropertiesUtil("ImagePaths");
 
 		// 設定ウィンドウのプロパティファイルを読み込む
-		this.configWindowProperties = PropertiesUtil.loadPropertiesFile("ConfigWindow");
+		this.configWindowProperties = new PropertiesUtil("ConfigWindow");
 
 		// 画像格納リストを初期化
 		this.images = new HashMap<Integer, Image>();

@@ -1,7 +1,5 @@
 package input;
 
-import java.util.Properties;
-
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
@@ -34,7 +32,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	/**
 	 * キー入力に関するプロパティファイルを読み込むクラス
 	 */
-	protected Properties keyConfigProperties;
+	protected PropertiesUtil keyConfigProperties;
 
 	/**
 	 * コンストラクタで渡されたメインウィンドウの管理クラスを保持するプロパティ。
@@ -60,7 +58,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	 */
 	public JNativeHookKeyListener(WindowManager<MainPaneController> mainWindow) {
 		// キー入力に関するプロパティファイルを読み込む
-		this.keyConfigProperties = PropertiesUtil.loadPropertiesFile("KeyConfig");
+		this.keyConfigProperties = new PropertiesUtil("KeyConfig");
 
 		// 渡されたウィンドウを保持する
 		this.mainWindow = mainWindow;
@@ -128,7 +126,9 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 	protected void modeKeyconfigProcessing(NativeKeyEvent event) {
 		// 有効なキーが入力されたら
 		if (event.getKeyCode() != 0) {
-			// TODO 入力されたキーを設定対象のキーとして保存する
+			// 入力されたキー設定を反映して、プロパティファイルを保存
+			this.keyConfigProperties.setProperty(this.configWindow.getController().getPropertiesKeyNameOfConfigTarget(), Integer.toString(event.getKeyCode()));
+			this.keyConfigProperties.store("Key config.");
 
 			// キー設定完了なので、設定中のフラグを下げる
 			this.configWindow.getController().setNowKeyConfiging(false);
@@ -145,6 +145,9 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 
 				// 設定対象のTextFiledを保持しているプロパティをクリア
 				jNativeHookKeyListener.configWindow.getController().setTextFieldOfConfigTarget(null);
+
+				// 設定対象のプロパティファイル上でのキー名を保持しているプロパティをクリア
+				jNativeHookKeyListener.configWindow.getController().setPropertiesKeyNameOfConfigTarget(null);
 
 				// 完了ボタンを押せるようにする
 				jNativeHookKeyListener.configWindow.getController().completeButton.setDisable(false);

@@ -1,7 +1,6 @@
 package controllers;
 
 import java.net.URL;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -26,12 +25,12 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	/**
 	 * 設定ウィンドウに関する設定プロパティファイルを読み込むクラス
 	 */
-	protected Properties configWindowProperties;
+	protected PropertiesUtil configWindowProperties;
 
 	/**
 	 * キー入力に関する設定プロパティファイルを読み込むクラス
 	 */
-	private Properties keyConfigProperties;
+	private PropertiesUtil keyConfigProperties;
 
 	/**
 	 * 設定ウィンドウのルートペイン
@@ -89,6 +88,11 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	protected TextField textFieldOfConfigTarget;
 
 	/**
+	 * キー設定中の対象項目と対応するキー設定プロパティファイル上でのキー名
+	 */
+	protected String propertiesKeyNameOfConfigTarget;
+
+	/**
 	 * 説明テキストのLabel
 	 */
 	public Label descriptionLabel;
@@ -103,14 +107,14 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	 */
 	public void initialize(URL location, ResourceBundle resources) {
 		// 設定ウィンドウに関する設定プロパティファイルを読み込む
-		this.configWindowProperties = PropertiesUtil.loadPropertiesFile("ConfigWindow");
+		this.configWindowProperties = new PropertiesUtil("ConfigWindow");
 
 		// デフォルトのままだと、設定ウィンドウが開いた時にTextFieldへフォーカスがいってしまうので外す(クリックしてからキーを押すことでそのキーコードが設定項目に適用されるという形を採るため自動的にフォーカスがいくのは邪魔になる)
 		this.keyConfigAttackTextField.setFocusTraversable(false);
 		this.keyConfigNightBattleTextField.setFocusTraversable(false);
 
 		// キー入力に関するプロパティファイルを読み込む
-		this.keyConfigProperties = PropertiesUtil.loadPropertiesFile("KeyConfig");
+		this.keyConfigProperties = new PropertiesUtil("KeyConfig");
 
 		// キー設定をプロパティファイルから取得
 		this.keyConfigAttackValue      = Integer.parseInt(this.keyConfigProperties.getProperty("attackChangeKeyCode"));      // 進撃・撤退切替キーの設定値
@@ -154,6 +158,13 @@ public class ConfigPaneController extends BaseController implements Initializabl
 			// キー設定中の対象項目となるTextFieldをプロパティに保持する
 			this.textFieldOfConfigTarget = textFieldOfConfigTarget;
 
+			// キー設定中の項目に対応するキー設定プロパティファイル上でのキー名を保持する
+			if (textFieldOfConfigTarget.getId().equals("keyConfigAttackTextField")) {
+				this.propertiesKeyNameOfConfigTarget = "attackChangeKeyCode";
+			} else if (textFieldOfConfigTarget.getId().equals("keyConfigNightBattleTextField")) {
+				this.propertiesKeyNameOfConfigTarget = "nightBattleChangeKeyCode";
+			}
+
 			// 割り当てたいキーをタップしろという旨を文字色:黒で表示する
 			this.descriptionLabel.setText(this.configWindowProperties.getProperty("descriptionLabelWordingKeyConfiging"));
 			this.descriptionLabel.setStyle("-fx-text-fill: #000000;");
@@ -195,7 +206,7 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	 * configWindowPropertiesのゲッター
 	 * @return 設定ウィンドウに関する設定プロパティファイルを読み込んだクラスインスタンスを返す
 	 */
-	public Properties getConfigWindowProperties() {
+	public PropertiesUtil getConfigWindowProperties() {
 		return this.configWindowProperties;
 	}
 
@@ -221,5 +232,21 @@ public class ConfigPaneController extends BaseController implements Initializabl
 	 */
 	public void setTextFieldOfConfigTarget(TextField textFieldOfConfigTarget) {
 		this.textFieldOfConfigTarget = textFieldOfConfigTarget;
+	}
+
+	/**
+	 * propertiesKeyNameOfConfigTargetのゲッター
+	 * @return キー設定中の対象項目に対応するキー設定プロパティファイル上でのキー名
+	 */
+	public String getPropertiesKeyNameOfConfigTarget() {
+		return this.propertiesKeyNameOfConfigTarget;
+	}
+
+	/**
+	 * propertiesKeyNameOfConfigTargetのセッター
+	 * @param propertiesKeyNameOfConfigTarget キー設定中の対象項目に対応するキー設定プロパティファイル上でのキー名
+	 */
+	public void setPropertiesKeyNameOfConfigTarget(String propertiesKeyNameOfConfigTarget) {
+		this.propertiesKeyNameOfConfigTarget = propertiesKeyNameOfConfigTarget;
 	}
 }
