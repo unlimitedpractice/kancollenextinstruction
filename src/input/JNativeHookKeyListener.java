@@ -111,9 +111,10 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 		if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("attackChangeKeyCode"))) {
 			// メインペインにある夜戦突入・追撃せず画像を切り替える
 			mainPaneController.toggleAttackImageView();
-		} else if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("nightBattleChangeKeyCode"))) {
-			// 夜戦突入・追撃せず切替キーが離されたら
+		}
 
+		// 夜戦突入・追撃せず切替キーが離されたら
+		if (event.getKeyCode() == Integer.parseInt(this.keyConfigProperties.getProperty("nightBattleChangeKeyCode"))) {
 			// メインペインにある夜戦突入・追撃せず画像を切り替える
 			mainPaneController.toggleNightBattleImageView();
 		}
