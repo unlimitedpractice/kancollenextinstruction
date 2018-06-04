@@ -21,5 +21,6 @@
          </image>
       </ImageView>
       <Button id="configButton" fx:id="configButton" layoutX="226.0" layoutY="129.0" mnemonicParsing="false" onAction="#configButtonOnAction" text="設定" />
+      <Button id="screenCapture" fx:id="screenCapture" layoutX="14.0" layoutY="129.0" mnemonicParsing="false" onAction="#screenCaptureButtonOnAction" text="画面キャプチャ" />
    </children>
 </Pane>

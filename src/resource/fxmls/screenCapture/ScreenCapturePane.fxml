@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane id="screenCapturePane" fx:id="screenCapturePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScreenCapturePaneController">
+   <children>
+      <TextField id="imageSaveDestinationTextField" fx:id="imageSaveDestinationTextField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="37.0" prefWidth="302.0" promptText="キャプチャ画像保存先" />
+      <Button id="imageSaveDestinationButton" fx:id="imageSaveDestinationButton" layoutX="326.0" layoutY="14.0" mnemonicParsing="false" onAction="#imageSaveDestinationButtonOnAction" text="参照" />
+      <Button id="captureButton" fx:id="captureButton" layoutX="137.0" layoutY="58.0" mnemonicParsing="false" onAction="#captureButtonOnAction" text="キャプチャ実行" />
+   </children>
+</Pane>

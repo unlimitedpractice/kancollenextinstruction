@@ -129,7 +129,7 @@ public class JNativeHookKeyListener implements NativeKeyListener {
 		if (event.getKeyCode() != 0) {
 			// 入力されたキー設定を反映して、プロパティファイルを保存
 			this.keyConfigProperties.setProperty(this.configWindow.getController().getPropertiesKeyNameOfConfigTarget(), Integer.toString(event.getKeyCode()));
-			this.keyConfigProperties.store("Key config.");
+			this.keyConfigProperties.store(this.configWindow.getController().getConfigWindowProperties().getProperty("keyConfigComment"));
 
 			// キー設定完了なので、設定中のフラグを下げる
 			this.configWindow.getController().setNowKeyConfiging(false);

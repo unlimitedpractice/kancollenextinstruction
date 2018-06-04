@@ -58,6 +58,11 @@ public class MainPaneController extends BaseController implements Initializable 
 	PropertiesUtil configWindowProperties;
 
 	/**
+	 * 画面キャプチャウィンドウのプロパティファイルを読み込むクラス
+	 */
+	PropertiesUtil screenCaptureWindowProperties;
+
+	/**
 	 * メインウィンドウのルートペイン
 	 */
 	public Pane mainPane;
@@ -91,9 +96,19 @@ public class MainPaneController extends BaseController implements Initializable 
 	public Button configButton;
 
 	/**
+	 * 画面キャプチャボタン
+	 */
+	public Button screenCaptureButton;
+
+	/**
 	 * 設定ウィンドウの管理クラス
 	 */
 	public WindowManager<ConfigPaneController> configWindow;
+
+	/**
+	 * 画面キャプチャウィンドウの管理クラス
+	 */
+	public WindowManager<ScreenCapturePaneController> screenCaptureWindow;
 
 	/**
 	 * コンストラクタ。
@@ -110,6 +125,9 @@ public class MainPaneController extends BaseController implements Initializable 
 
 		// 設定ウィンドウのプロパティファイルを読み込む
 		this.configWindowProperties = new PropertiesUtil("ConfigWindow");
+
+		// 画面キャプチャウィンドウのプロパティファイルを読み込む
+		this.screenCaptureWindowProperties = new PropertiesUtil("ScreenCaptureWindow");
 
 		// 画像格納リストを初期化
 		this.images = new HashMap<Integer, Image>();
@@ -226,6 +244,32 @@ public class MainPaneController extends BaseController implements Initializable 
 	}
 
 	/**
+	 * 画面キャプチャウィンドウを開く
+	 */
+	public void openScreenCaptureWindow() {
+		// 画面キャプチャウィンドウをFXMLから生成
+		this.screenCaptureWindow = new WindowManager<ScreenCapturePaneController>("screenCaptureWindow", this.fxmlFilePathsProperties.getProperty("ScreenCapturePane"), null, Integer.parseInt(this.screenCaptureWindowProperties.getProperty("width")), Integer.parseInt(this.screenCaptureWindowProperties.getProperty("height")));
+
+		// 画面キャプチャウィンドウの親ステージを設定
+		this.screenCaptureWindow.getStage().initOwner(this.window.getStage());
+
+		// 画面キャプチャウィンドウのタイトル設定
+		this.screenCaptureWindow.getStage().setTitle(this.screenCaptureWindowProperties.getProperty("title"));
+
+		// 画面キャプチャウィンドウのリサイズができないようにする
+		this.screenCaptureWindow.getStage().setResizable(false);
+
+		// 画面キャプチャウィンドウのコントローラに設定ウィンドウのウィンドウクラスを保持
+		this.screenCaptureWindow.getController().setWindow(this.screenCaptureWindow);
+
+		// 画面キャプチャウィンドウの親ウィンドウをセット
+		this.screenCaptureWindow.setParentWindow(this.window);
+
+		// 画面キャプチャウィンドウを表示
+		this.screenCaptureWindow.showWindow();
+	}
+
+	/**
 	 * attackImageViewクリック時の処理
 	 * @param event イベント発生時の各種情報(クリックされた場所の座標等もここから取得できる)
 	 */
@@ -249,6 +293,14 @@ public class MainPaneController extends BaseController implements Initializable 
 	public void configButtonOnAction() {
 		// 設定ウィンドウを開く
 		this.openConfigWindow();
+	}
+
+	/**
+	 * 画面キャプチャボタンが押された場合の処理
+	 */
+	public void screenCaptureButtonOnAction() {
+		// 画面キャプチャウィンドウを開く
+		this.openScreenCaptureWindow();
 	}
 
 	/**

@@ -27,6 +27,16 @@ public enum PropertiesFilePaths {
 	ConfigWindow("propertiesfiles/ConfigWindow.properties"),
 
 	/**
+	 * 画面キャプチャウィンドウの各種設定値等を記述したプロパティファイルのパス
+	 */
+	ScreenCaptureWindow("propertiesfiles/ScreenCaptureWindow.properties"),
+
+	/**
+	 * 画面キャプチャに関する設定プロパティファイルのパス
+	 */
+	ScreenCaptureConfig("propertiesfiles/ScreenCaptureConfig.properties"),
+
+	/**
 	 * 画像ファイルパスを設定するプロパティファイルのパス
 	 */
 	ImagePaths("propertiesfiles/ImagePaths.properties"),
